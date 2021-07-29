@@ -2,6 +2,8 @@ package G27.Central.utils.zabbix;
 
 public class ZabbixPaths {
 
+    public static final String REGISTER = "/register";
+
     public static final String INSTANCE_ID = "/{iid}";
 
     public static final String EVENT_PATH = INSTANCE_ID + "/event";
