@@ -37,10 +37,12 @@ public class ItemController {
         return result;
     }
 
+
     @GetMapping(ITEM_PATH_INFO)
     public JSONObject getItem(@PathVariable String iid,@PathVariable String name){
 
         api = ConnectorController.getZab(iid);
+
 
         Request request = RequestBuilder.newBuilder().method("item.get")
                 .paramEntry("name", name).paramEntry("key_", "key")
