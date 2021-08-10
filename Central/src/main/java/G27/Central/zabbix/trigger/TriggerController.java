@@ -1,32 +1,33 @@
-package G27.Central.zabbix.hosts;
+package G27.Central.zabbix.trigger;
 
 import G27.Central.connectors.ConnectorController;
 import G27.Central.connectors.Zabbix.ZabbixConnector;
 import G27.Central.utils.Request;
 import G27.Central.utils.RequestBuilder;
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import static G27.Central.utils.zabbix.ZabbixPaths.HOST_PATH;
+import static G27.Central.utils.zabbix.ZabbixPaths.TRIGGER_PATH;
 
 @RestController
-public class HostController {
+@RequestMapping(headers = "Accept=application/json")
+public class TriggerController {
 
     private ZabbixConnector api;
 
-    @GetMapping(HOST_PATH)
-    public JSONObject getHost(@PathVariable String iid){
+    @GetMapping(TRIGGER_PATH)
+    public JSONObject getTriggers(@PathVariable String iid){
 
         api = ConnectorController.getZab(iid);
 
-        Request request = RequestBuilder.newBuilder().method("host.get").paramEntry("filter","host: [Zabbix server, Linux server]").build();
-        JSONObject result = api.call(request);
+        Request req = RequestBuilder.newBuilder().method("trigger.get").build();
 
-        System.err.println(JSON.toJSONString(result, true));
+        JSONObject res = api.call(req);
 
-        return result;
+        return res;
     }
+
 }

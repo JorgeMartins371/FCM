@@ -20,7 +20,7 @@ public class CentralApplication {
 			@Override
 			public void addCorsMappings(CorsRegistry registry) {
 				registry.addMapping("/**")
-						.allowedOrigins("http://localhost:9000")
+						.allowedOrigins("http://localhost:3000")
 						.allowCredentials(true)
 						.allowedHeaders("Authorization", "Content-type", "Access-Control-Allow-Headers")
 						//.maxAge(1)

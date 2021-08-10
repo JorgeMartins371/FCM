@@ -23,9 +23,9 @@ public class EventController {
         api = ConnectorController.getZab(iid);
 
         Request request = RequestBuilder.newBuilder().method("event.get")
-                .paramEntry("hostids","10084").paramEntry("output","extended")
-                .paramEntry("select_acknowledges","extended").paramEntry("selectTags","extended")
-                .paramEntry("selectSurpressionData","extended")
+                /*.paramEntry("hostids","10084")*/.paramEntry("output","extend")
+                .paramEntry("select_acknowledges","extend").paramEntry("selectTags","extend")
+                .paramEntry("selectSurpressionData","extend")
                 .build();
 
         JSONObject result = api.call(request);
