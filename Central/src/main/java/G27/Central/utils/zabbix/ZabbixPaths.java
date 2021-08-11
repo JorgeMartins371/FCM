@@ -15,4 +15,6 @@ public class ZabbixPaths {
 
     public static final String ITEM_PATH = INSTANCE_ID + "/item";
     public static final String ITEM_PATH_INFO = ITEM_PATH + "/{name}";
+
+    public static final String ACTIONS_PATH = INSTANCE_ID + "/actions";
 }

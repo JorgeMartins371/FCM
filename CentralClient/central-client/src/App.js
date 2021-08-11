@@ -16,8 +16,6 @@ function App() {
     return <Login setToken={setToken} />
   }*/
 
-  zab()
-
   const [token, setToken] = useState();
 
   if(!token) {
