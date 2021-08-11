@@ -3,6 +3,7 @@ package G27.Central.utils.zabbix;
 public class ZabbixPaths {
 
     public static final String REGISTER = "/register";
+    public static final String LOGIN = "/login";
 
     public static final String INSTANCE_ID = "/{iid}";
 
