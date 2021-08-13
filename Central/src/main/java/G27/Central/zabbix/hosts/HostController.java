@@ -6,9 +6,7 @@ import G27.Central.utils.Request;
 import G27.Central.utils.RequestBuilder;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import static G27.Central.utils.zabbix.ZabbixPaths.HOST_PATH;
 
@@ -18,11 +16,11 @@ public class HostController {
     private ZabbixConnector api;
 
     @GetMapping(HOST_PATH)
-    public JSONObject getHost(@PathVariable String iid){
+    public JSONObject getHost(@PathVariable String iid) {
 
         api = ConnectorController.getZab(iid);
 
-        Request request = RequestBuilder.newBuilder().method("host.get").paramEntry("filter","host: [Zabbix server, Linux server]").build();
+        Request request = RequestBuilder.newBuilder().method("host.get").build();
         JSONObject result = api.call(request);
 
         System.err.println(JSON.toJSONString(result, true));

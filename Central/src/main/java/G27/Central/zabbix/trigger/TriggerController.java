@@ -5,10 +5,7 @@ import G27.Central.connectors.Zabbix.ZabbixConnector;
 import G27.Central.utils.Request;
 import G27.Central.utils.RequestBuilder;
 import com.alibaba.fastjson.JSONObject;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import static G27.Central.utils.zabbix.ZabbixPaths.TRIGGER_PATH;
 
@@ -18,12 +15,12 @@ public class TriggerController {
 
     private ZabbixConnector api;
 
-    @GetMapping(TRIGGER_PATH)
-    public JSONObject getTriggers(@PathVariable String iid){
+    @PostMapping(TRIGGER_PATH)
+    public JSONObject getTriggers(@PathVariable String iid, @RequestBody JSONObject body){
 
         api = ConnectorController.getZab(iid);
 
-        Request req = RequestBuilder.newBuilder().method("trigger.get").build();
+        Request req = RequestBuilder.newBuilder().method("trigger.get").paramEntry("triggerids",body.getJSONArray("objids")).build();
 
         JSONObject res = api.call(req);
 

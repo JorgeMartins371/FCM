@@ -36,4 +36,29 @@ public class EventController {
 
         return result;
     }
+
+    @PostMapping(ACK_PATH)
+    public JSONObject ackEvent(@PathVariable String iid ,@RequestBody JSONObject ack){
+        api = ConnectorController.getZab(iid);
+
+        System.out.println(ack.get("eventids"));
+        System.out.println(ack.getString("eventids"));
+
+        RequestBuilder aux = RequestBuilder.newBuilder().method("event.acknowledge")
+                .paramEntry("action",ack.getInteger("action")).paramEntry("eventids",ack.get("eventids"));
+
+        if((ack.getInteger("action") == 4 && !ack.containsKey("message")) || (ack.getInteger("action") == 8 && !ack.containsKey("severity"))){
+            return null; //Lançar bad Request exception
+        }
+
+        else if(ack.containsKey("message")) aux.paramEntry("message",ack.getString("message"));
+
+        else if(ack.containsKey("severity")) aux.paramEntry("severity",ack.getInteger("severity"));
+
+        Request req = aux.build();
+
+        System.out.println(req.toString());
+
+        return api.call(req);
+    }
 }
