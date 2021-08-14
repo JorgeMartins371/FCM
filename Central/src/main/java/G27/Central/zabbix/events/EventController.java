@@ -7,7 +7,11 @@ import G27.Central.utils.RequestBuilder;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.fasterxml.jackson.annotation.JsonAlias;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.LinkedList;
+import java.util.List;
 
 import static G27.Central.utils.zabbix.ZabbixPaths.*;
 
@@ -22,8 +26,7 @@ public class EventController {
 
         api = ConnectorController.getZab(iid);
 
-        Request request = RequestBuilder.newBuilder().method("event.get")
-                /*.paramEntry("hostids","10084")*/.paramEntry("output","extend")
+        Request request = RequestBuilder.newBuilder().method("event.get").paramEntry("output","extend")
                 .paramEntry("select_acknowledges","extend").paramEntry("selectTags","extend")
                 .paramEntry("selectSurpressionData","extend")
                 .build();
@@ -39,25 +42,35 @@ public class EventController {
 
     @PostMapping(ACK_PATH)
     public JSONObject ackEvent(@PathVariable String iid ,@RequestBody JSONObject ack){
+
         api = ConnectorController.getZab(iid);
 
-        System.out.println(ack.get("eventids"));
-        System.out.println(ack.getString("eventids"));
+        Integer action = 0;
+
+        System.out.println(ack);
 
         RequestBuilder aux = RequestBuilder.newBuilder().method("event.acknowledge")
-                .paramEntry("action",ack.getInteger("action")).paramEntry("eventids",ack.get("eventids"));
+                .paramEntry("eventids",ack.get("eventids"));
 
-        if((ack.getInteger("action") == 4 && !ack.containsKey("message")) || (ack.getInteger("action") == 8 && !ack.containsKey("severity"))){
-            return null; //Lançar bad Request exception
+        if(ack.getBoolean("close")) action+=1;
+
+        if(ack.getBoolean("ack")) action+=2;
+
+        if(!ack.getString("message").equals("")){
+            aux.paramEntry("message",ack.getString("message"));
+            action +=4;
         }
 
-        else if(ack.containsKey("message")) aux.paramEntry("message",ack.getString("message"));
+        if(ack.getInteger("severity")!=9){
+            aux.paramEntry("severity",ack.getInteger("severity"));
+            action +=8;
+        }
 
-        else if(ack.containsKey("severity")) aux.paramEntry("severity",ack.getInteger("severity"));
+        //Fazer controlo
+
+        aux.paramEntry("action",action);
 
         Request req = aux.build();
-
-        System.out.println(req.toString());
 
         return api.call(req);
     }

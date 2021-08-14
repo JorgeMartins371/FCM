@@ -20,6 +20,64 @@ const InfoBox = () => {
     //         console.log(events)
     //     })
     // }
+
+    /*const [triggerIds, setTrigIds] = useState();
+    const [hostIds, setHostIds] = useState();
+
+    const triggerReq = async (objids) => {
+
+        let payload = {
+            objids
+        }
+        let options = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(payload)
+        }
+
+        fetchData('http://localhost:8080/1/trigger',options)
+        .then(res => {
+            const aux = []
+            res.data.result.map(trigger => {
+                aux.push(trigger.triggerid)
+            })
+            setTrigIds(aux)
+        })
+    }
+
+    const getHostIds = () => {
+
+        var objids = new Array(events.events.length - 1)
+
+        for (var i = 0; i < event.events.length - 1; i++) {
+            objids[i] = events.events[i].objectid
+        }
+
+        triggerReq(objids)
+
+        let payload = {
+            triggerIds
+        }
+        let options = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(payload)
+        }
+
+        fetchData('http://localhost:8080/1/host',options)
+        .then(res => {
+            console.log(res)
+            // const aux = []
+            // res.data.result.map(trigger => {
+            //     aux.push(trigger.triggerid)
+            // })
+            // setTrigIds(aux)
+        })
+    }*/
     
 
     useEffect(() => {
@@ -37,7 +95,7 @@ const InfoBox = () => {
     if(events !== undefined){
         console.log(events)
         return (
-            <Container>
+            <div>
                 <ListGroup>
                     {events.map(event => {
                         return(
@@ -45,7 +103,7 @@ const InfoBox = () => {
                         )
                     })}
                 </ListGroup>
-            </Container>
+            </div>
         )
     }
 

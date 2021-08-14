@@ -15,12 +15,12 @@ public class TriggerController {
 
     private ZabbixConnector api;
 
-    @PostMapping(TRIGGER_PATH)
-    public JSONObject getTriggers(@PathVariable String iid, @RequestBody JSONObject body){
+    @GetMapping(TRIGGER_PATH)
+    public JSONObject getTriggers(@PathVariable String iid, @PathVariable String eid){
 
         api = ConnectorController.getZab(iid);
 
-        Request req = RequestBuilder.newBuilder().method("trigger.get").paramEntry("triggerids",body.getJSONArray("objids")).build();
+        Request req = RequestBuilder.newBuilder().method("trigger.get").paramEntry("triggerids",eid).build();
 
         JSONObject res = api.call(req);
 

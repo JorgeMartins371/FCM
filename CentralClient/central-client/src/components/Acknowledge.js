@@ -1,11 +1,13 @@
 import { useState } from 'react'
 import {Button, Modal, Form, Row, Col, Container} from 'react-bootstrap'
+import { fetchData } from '../utils/Fetcher';
 
-const Acknowledge = () => {
+const Acknowledge = (eid ) => {
 
     const [show, setShow] = useState(false)
-    const [severity, setSev] = useState()
-    const [action, setAction] = useState()
+    const [severity, setSev] = useState(9)
+    const [ack, setAck] = useState(false)
+    const [close, setClose] = useState(false)
     const [message, setMsg] = useState('')
 
     const handleClose = () => setShow(false)
@@ -15,11 +17,12 @@ const Acknowledge = () => {
 
         e.preventDefault()
 
-        if(message !== '') setAction(4)
-
+        const eventids = eid.eventids;
 
         let payload = {
-            action,
+            eventids,
+            ack,
+            close,
             message,
             severity
         }
@@ -32,21 +35,24 @@ const Acknowledge = () => {
         }
 
         console.log(options)
-        /*const token = fetchData('http://localhost:8080/login',options)
-        .then(res => {
-            console.log(res)
-            setToken(res.data.Encoded)
-        })*/
-        //handleClose()
+        const resp = fetchData('http://localhost:8080/1/event/ack',options)
+         .then(res => {
+             console.log(res)
+         })
+        handleClose()
     }
 
     const handleSevChange = (e) => {
         setSev(e.target.id)
     }
 
-    const handleAck = (e) => {
-        setAction(e)
+    const handleAck = () => {
+        setAck(!ack)
     }
+
+    const handleCloseOption = () => [
+        setClose(!close)
+    ]
 
     const handleOnChange = (e) => {
         setMsg(e.target.value)
@@ -68,7 +74,7 @@ const Acknowledge = () => {
                         <Form.Check type="checkbox" label="Acknowledge" onChange={handleAck}/>
                     </Form.Group>
                     <Form.Group className="mb-3" controlId="formBasicCheckbox">
-                        <Form.Check type="checkbox" label="Close Event" onChange={handleAck}/>
+                        <Form.Check type="checkbox" label="Close Event" onChange={handleCloseOption}/>
                     </Form.Group>
                     <Form.Group className="mb-3" controlId="formBasicEmail">
                         <Form.Label>Message</Form.Label>

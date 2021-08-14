@@ -1,8 +1,8 @@
-import React from 'react'
+import { useEffect , useState } from 'react'
 import { ListGroup, Col, Row, DropdownButton, Dropdown} from 'react-bootstrap'
 import {Link} from 'react-router-dom'
 import Acknowledge from './Acknowledge.js'
-import { FiTool } from "react-icons/fi";
+import MaintenanceIcon from './MaintenanceIcon.js'
 import { fetchData } from '../utils/Fetcher';
 
 /*0 - not classified;
@@ -14,63 +14,28 @@ import { fetchData } from '../utils/Fetcher';
 
 const Event = ({event}) => {
 
-    /*const [triggerIds, setTrigIds] = useState();
-    const [hostIds, setHostIds] = useState();
-
-    const triggerReq = async (objids) => {
-
-        let payload = {
-            objids
-        }
-        let options = {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(payload)
-        }
-
-        fetchData('http://localhost:8080/1/trigger',options)
-        .then(res => {
-            const aux = []
-            res.data.result.map(trigger => {
-                aux.push(trigger.triggerid)
-            })
-            setTrigIds(aux)
-        })
+    const name = "null"
+    const maintenance_status = "0"
+    let dummy = {
+        name,
+        maintenance_status
     }
 
-    const getHostIds = () => {
+    const[host, setHost] = useState(JSON.stringify(dummy));
 
-        var objids = new Array(events.events.length - 1)
-
-        for (var i = 0; i < event.events.length - 1; i++) {
-            objids[i] = events.events[i].objectid
-        }
-
-        triggerReq(objids)
-
-        let payload = {
-            triggerIds
-        }
-        let options = {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(payload)
-        }
-
-        fetchData('http://localhost:8080/1/host',options)
+    useEffect(() => {
+        let headers = new Headers({
+            Accept: 'application/json',
+            'Access-Control-Allow-Headers': 'Authorization'
+        })
+        let options = { headers }
+        fetchData('http://localhost:8080/1/host/'+event.objectid,options)
         .then(res => {
             console.log(res)
-            // const aux = []
-            // res.data.result.map(trigger => {
-            //     aux.push(trigger.triggerid)
-            // })
-            // setTrigIds(aux)
+            setHost(res.data.result[0])
+            console.log(host)
         })
-    }*/
+    }, [])
 
     const getSevColor = (sev) => {
         switch(sev){
@@ -87,17 +52,16 @@ const Event = ({event}) => {
     var ackColor = event.acknowledged !== "0" ? 'success' : 'danger'
  
     return (
-        <ListGroup.Item key={event.eventid}>
+        <ListGroup.Item key={event.eventid}>    
             <Row>
                 <Col>Event ID: {event.eventid}</Col>
-                <Col>Object ID: {event.objectid}</Col>
-                {event.suppressed === "1" ? <FiTool style={{color : 'orange'}}/> : <Col/>}
-                <Col xs={9}>{event.name}</Col>
-                <Col style={{backgroundColor : sevColor[1]}} xs={1}>{sevColor[0]}</Col>
+                <Col>{host.name}{host.maintenance_status === "1" ? <MaintenanceIcon/> : <></>}</Col>
+                <Col md={7}>{event.name}</Col>
+                <Col style={{backgroundColor : sevColor[1]}} md={1}>{sevColor[0]}</Col>
                 <Col>
                     <DropdownButton id={event.eventid + 'Ack'}  title= "Ack" variant={ackColor}>
                         <Dropdown.Item><Link to={{   pathname: "/ack/"+event.eventid,   state: event.acknowledges  }}>Go to AckInfo</Link></Dropdown.Item>
-                        <Acknowledge/>
+                        <Acknowledge eventids={event.eventid}/>
                     </DropdownButton>
                 </Col>
             </Row>

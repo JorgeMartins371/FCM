@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { ListGroup, Col, Row, DropdownButton, Dropdown, Container} from 'react-bootstrap'
+import { ListGroup, Col, Row, Container} from 'react-bootstrap'
 
 const AcknowledgeInfo = (acknowledges) => {
     console.log(acknowledges.location.state)
