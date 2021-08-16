@@ -1,9 +1,10 @@
-import { useEffect , useState } from 'react'
+import { useEffect , useState, useContext } from 'react'
 import { ListGroup, Col, Row, DropdownButton, Dropdown} from 'react-bootstrap'
 import {Link} from 'react-router-dom'
 import Acknowledge from './Acknowledge.js'
 import MaintenanceIcon from './MaintenanceIcon.js'
 import { fetchData } from '../utils/Fetcher';
+import GlobalState from '../utils/GlobalState';
 
 /*0 - not classified;
 1 - information;
@@ -22,6 +23,7 @@ const Event = ({event}) => {
     }
 
     const[host, setHost] = useState(JSON.stringify(dummy));
+    const [state, setState] = useContext(GlobalState);
 
     useEffect(() => {
         let headers = new Headers({
@@ -29,7 +31,7 @@ const Event = ({event}) => {
             'Access-Control-Allow-Headers': 'Authorization'
         })
         let options = { headers }
-        fetchData('http://localhost:8080/1/host/'+event.objectid,options)
+        fetchData('http://localhost:8080/'+ state.Con + '/host/'+event.objectid,options)
         .then(res => {
             console.log(res)
             setHost(res.data.result[0])
@@ -50,6 +52,7 @@ const Event = ({event}) => {
 
     var sevColor = getSevColor(event.severity)
     var ackColor = event.acknowledged !== "0" ? 'success' : 'danger'
+    var date = new Date(event.clock*1000)
  
     return (
         <ListGroup.Item key={event.eventid}>    
@@ -57,7 +60,8 @@ const Event = ({event}) => {
                 <Col>Event ID: {event.eventid}</Col>
                 <Col>{host.name}{host.maintenance_status === "1" ? <MaintenanceIcon/> : <></>}</Col>
                 <Col md={7}>{event.name}</Col>
-                <Col style={{backgroundColor : sevColor[1]}} md={1}>{sevColor[0]}</Col>
+                <Col>Date : {date.toLocaleDateString()}</Col>
+                <Col style={{backgroundColor : sevColor[1]}} md={1} align="center">{sevColor[0]}</Col>
                 <Col>
                     <DropdownButton id={event.eventid + 'Ack'}  title= "Ack" variant={ackColor}>
                         <Dropdown.Item><Link to={{   pathname: "/ack/"+event.eventid,   state: event.acknowledges  }}>Go to AckInfo</Link></Dropdown.Item>
