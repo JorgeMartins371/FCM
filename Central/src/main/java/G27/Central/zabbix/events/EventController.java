@@ -40,6 +40,29 @@ public class EventController {
         return result;
     }
 
+    @PostMapping(EVENT_PATH)
+    public JSONObject getSpecificEventS(@PathVariable String iid, @RequestBody JSONObject body){
+        api = ConnectorController.getZab(iid);
+
+        RequestBuilder aux = RequestBuilder.newBuilder().method("event.get").paramEntry("output","extend")
+                .paramEntry("select_acknowledges","extend").paramEntry("selectTags","extend")
+                .paramEntry("selectSurpressionData","extend");
+
+        if(!body.getJSONArray("severities").isEmpty()) aux.paramEntry("severities",body.getJSONArray("severities"));
+
+        JSONArray acks = body.getJSONArray("acknowledged");
+
+        if(acks.getBoolean(0) && !acks.getBoolean(1)) aux.paramEntry("acknowledged",true); //Apenas Eventos Acknowledged
+
+        Request req = aux.build();
+
+        JSONObject result = api.call(req);
+
+        System.err.println(JSON.toJSONString(result, true));
+
+        return result;
+    }
+
     @PostMapping(ACK_PATH)
     public JSONObject ackEvent(@PathVariable String iid ,@RequestBody JSONObject ack){
 

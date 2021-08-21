@@ -1,13 +1,20 @@
 import React, { useState } from 'react'
-import { Container, Form, Col, Row } from 'react-bootstrap'
+import { Container, Form, Col, Row, Button } from 'react-bootstrap'
 import PropTypes from 'prop-types'
 import { fetchData } from '../utils/Fetcher';
+import { useHistory } from "react-router-dom";
 
-const Login = ( {setToken} ) => {
+const Login = ({setToken}) => {
 
     const [username, setUserName] = useState();
     const [password, setPassword] = useState();
 
+    let history = useHistory();
+
+    const handleLogout = () => {
+        history.push('/')
+    }
+    
     const handleSubmit = async e => {
         e.preventDefault()
 
@@ -25,9 +32,15 @@ const Login = ( {setToken} ) => {
 
         const token = fetchData('http://localhost:8080/login',options)
         .then(res => {
-            console.log(res)
-            setToken(res.data.Encoded)
+            setToken(true)
+            localStorage.setItem('isLog', true)
         })
+    }
+
+    if(localStorage.getItem('isLog')){
+        <Button variant="primary" type="submit" onClick={handleLogout}>
+            Logging out...
+        </Button>
     }
 
     return (
@@ -54,10 +67,10 @@ const Login = ( {setToken} ) => {
                             <Form.Control required name="password"  type= "password" placeholder="password" onChange={e => setPassword(e.target.value)}/>                        
                         </Col>
                     </Form.Group>
-                    <br></br>
-                    <button type="submit" className="btn btn-outline-primary">Submit</button>
+                <Button variant="primary" type="submit">
+                    Submit
+                </Button>
                 </Form>
-                <br></br>
             </Container>
     )
 }

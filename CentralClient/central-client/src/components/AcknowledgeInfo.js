@@ -18,7 +18,7 @@ const AcknowledgeInfo = (acknowledges) => {
                     )
                 })}
             </ListGroup>
-            <Link to='/'> Go Back</Link>
+            <Link to='/events'> Go Back</Link>
         </Container>
     )
 }

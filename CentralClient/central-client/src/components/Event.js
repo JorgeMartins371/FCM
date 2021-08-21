@@ -31,6 +31,7 @@ const Event = ({event}) => {
             'Access-Control-Allow-Headers': 'Authorization'
         })
         let options = { headers }
+        console.log(state.Con)
         fetchData('http://localhost:8080/'+ state.Con + '/host/'+event.objectid,options)
         .then(res => {
             console.log(res)
@@ -54,23 +55,35 @@ const Event = ({event}) => {
     var ackColor = event.acknowledged !== "0" ? 'success' : 'danger'
     var date = new Date(event.clock*1000)
  
-    return (
-        <ListGroup.Item key={event.eventid}>    
-            <Row>
-                <Col>Event ID: {event.eventid}</Col>
-                <Col>{host.name}{host.maintenance_status === "1" ? <MaintenanceIcon/> : <></>}</Col>
-                <Col md={7}>{event.name}</Col>
-                <Col>Date : {date.toLocaleDateString()}</Col>
-                <Col style={{backgroundColor : sevColor[1]}} md={1} align="center">{sevColor[0]}</Col>
-                <Col>
-                    <DropdownButton id={event.eventid + 'Ack'}  title= "Ack" variant={ackColor}>
-                        <Dropdown.Item><Link to={{   pathname: "/ack/"+event.eventid,   state: event.acknowledges  }}>Go to AckInfo</Link></Dropdown.Item>
-                        <Acknowledge eventids={event.eventid}/>
-                    </DropdownButton>
-                </Col>
-            </Row>
-        </ListGroup.Item>
-    )
+    if(state.FilterAck[1] && event.acknowledged === "1"){
+        return(
+            <>
+            </>
+        )
+    }
+    else{
+        return (
+            <ListGroup.Item>    
+                <Row>
+                    <Col>{state.Con}</Col>
+                    <Col>{host.name}{host.maintenance_status === "1" ? <MaintenanceIcon/> : <></>}</Col>
+                    <Col md={7}>{event.name}</Col>
+                    <Col md={2}>{getDateFormat(date)}</Col>
+                    <Col style={{backgroundColor : sevColor[1]}} align="center">{sevColor[0]}</Col>
+                    <Col>
+                        <DropdownButton id={event.eventid + 'Ack'}  title= "Ack" variant={ackColor}>
+                            <Dropdown.Item><Link to={{   pathname: "/ack/"+event.eventid,   state: event.acknowledges  }}>Go to AckInfo</Link></Dropdown.Item>
+                            <Acknowledge eventids={event.eventid}/>
+                        </DropdownButton>
+                    </Col>
+                </Row>
+            </ListGroup.Item>
+            )
+        }
+}
+
+function getDateFormat(date){ //Ver razao de necessitar mais duas horas
+    return date.toLocaleDateString() + ' ' + (date.getHours()+2) + ':' +  date.getMinutes() + ':' + date.getSeconds()
 }
 
 export default Event

@@ -1,5 +1,5 @@
 import React, { useState, useContext  } from 'react'
-import { Container, Form, Col, Row, Button } from 'react-bootstrap'
+import { Form, Col, Button, Container } from 'react-bootstrap'
 import { fetchData } from '../utils/Fetcher';
 import { useHistory } from "react-router-dom";
 import GlobalState from '../utils/GlobalState';
@@ -33,11 +33,12 @@ const Dashboard = () => {
             body: JSON.stringify(payload)
         }
 
-        const con = fetchData('http://localhost:8080/zabbixCon',options)
+        fetchData('http://localhost:8080/zabbixCon',options)
         .then(res => {
             console.log(res)
 
             setState(state => ({...state, Con: res.data.ConnectionId}));
+            console.log(state.Con)
 
              history.push({
                  pathname:'/events',
@@ -49,7 +50,7 @@ const Dashboard = () => {
     }
 
     return (
-        <div>
+        <Container>
             <h3>Dashboard</h3>
             <Form onSubmit={handleSubmit}>
                 <Form.Group className="mb-3" controlId="formIP">
@@ -81,8 +82,7 @@ const Dashboard = () => {
                     Submit
                 </Button>
             </Form>
-
-        </div>
+        </Container>
     )
 }
 

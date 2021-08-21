@@ -1,14 +1,17 @@
-import { useState } from 'react'
+import { useState, useContext } from 'react'
 import {Button, Modal, Form, Row, Col, Container} from 'react-bootstrap'
 import { fetchData } from '../utils/Fetcher';
+import GlobalState from '../utils/GlobalState';
 
-const Acknowledge = (eid ) => {
+const Acknowledge = (eid) => {
 
     const [show, setShow] = useState(false)
     const [severity, setSev] = useState(9)
     const [ack, setAck] = useState(false)
     const [close, setClose] = useState(false)
     const [message, setMsg] = useState('')
+
+    const [state, setState] = useContext(GlobalState);
 
     const handleClose = () => setShow(false)
     const handleShow = () => setShow(true)
@@ -37,7 +40,7 @@ const Acknowledge = (eid ) => {
         console.log(options)
         const resp = fetchData('http://localhost:8080/1/event/ack',options)
          .then(res => {
-             console.log(res)
+            setState(state => ({...state, Ack: res}));
          })
         handleClose()
     }
