@@ -2,6 +2,7 @@ package G27.Central.zabbix.user;
 
 import G27.Central.DB.User;
 import G27.Central.DB.repositories.UserRepository;
+import G27.Central.utils.Encoder;
 import com.alibaba.fastjson.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,34 +21,33 @@ public class UserController {
     private UserRepository ur;
 
     @PostMapping(REGISTER)
-    public void register(@RequestBody JSONObject user){
+    public JSONObject register(@RequestBody JSONObject user){
 
-        String encoded = encoder(user.getString("username"), user.getString("password"));
+        String encoded = Encoder.encoder(user.getString("username"), user.getString("password"));
 
-        User newUser = new User(encoded, user.getString("username"));
+        User newUser = new User(encoded, user.getString("username"),user.getBoolean("admin"));
         ur.save(newUser);
+
+        JSONObject ret = new JSONObject();
+        ret.put("User",newUser);
+
+        return ret;
     }
 
     @PostMapping(LOGIN)
     public JSONObject login(@RequestBody JSONObject user){
 
-        String encoded = encoder(user.getString("username"), user.getString("password"));
+        String encoded = Encoder.encoder(user.getString("username"), user.getString("password"));
 
         User aux = ur.findByEncoded(encoded);
-
         if(aux != null){
             JSONObject ret = new JSONObject();
             ret.put("Encoded", aux.getEncoded());
+            ret.put("Admin",aux.isAdmin());
             return ret;
         }
 
         //Lançar exception de login failed
         return null;
-    }
-
-    public String encoder(String username, String password){
-        String ToEnc = username+":"+password;
-
-        return Base64.getEncoder().encodeToString(ToEnc.getBytes());
     }
 }

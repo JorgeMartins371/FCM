@@ -8,13 +8,15 @@ public class User {
     @Id
     private String encoded;
     private String name;
+    private boolean admin;
 
     public User(){
     }
 
-    public User(String encoded, String name){
+    public User(String encoded, String name, boolean admin){
         this.encoded = encoded;
         this.name = name;
+        this.admin = admin;
     }
 
     public void setName(String name){
@@ -28,4 +30,6 @@ public class User {
     public String getName(){
         return this.name;
     }
+
+    public boolean isAdmin() { return this.admin;}
 }

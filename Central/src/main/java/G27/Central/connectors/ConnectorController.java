@@ -1,7 +1,13 @@
 package G27.Central.connectors;
 
+import G27.Central.DB.Connection;
+import G27.Central.DB.User;
+import G27.Central.DB.repositories.ConnectionRepository;
+import G27.Central.DB.repositories.UserRepository;
 import G27.Central.connectors.Zabbix.ZabbixConnector;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -10,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.HashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static G27.Central.utils.zabbix.ZabbixPaths.ZABBIX_CON;
+import static G27.Central.utils.zabbix.ZabbixPaths.*;
 
 @RestController
 public class ConnectorController {
@@ -28,15 +34,14 @@ public class ConnectorController {
         zab.init();
         nextId.incrementAndGet();
 
-        connectors.put(nextId.toString(),zab);
+        connectors.put("Zabbix"+nextId.toString(),zab);
 
-        System.out.println("Connector intialized succesfully with ID=" + nextId.toString());
+        System.out.println("Connector intialized succesfully with ID= Zabbix" + nextId.toString());
 
         String user = "user_isel_estagio";
         String password = "Admin.Cl4raN€t";
         boolean login = zab.login(user, password);
         System.out.println("login result:" + login);
-        System.out.println("Instance created with ID=" + nextId.toString());
     }
 
     @PostMapping(ZABBIX_CON)
@@ -48,14 +53,27 @@ public class ConnectorController {
         zab.init();
         nextId.incrementAndGet();
 
-        connectors.put(nextId.toString(),zab);
+        connectors.put("Zabbix"+nextId.toString(),zab);
 
         String user = body.getString("user");
         String password = body.getString("pass");
         boolean login = zab.login(user, password);
 
         JSONObject ret = new JSONObject();
-        ret.put("ConnectionId",nextId.toString());
+        ret.put("ConnectionId","Zabbix"+nextId.toString());
+
+        return ret;
+    }
+
+    @GetMapping(CONNECTIONS_PATH)
+    public JSONObject getAvailableConnections(){
+
+        JSONObject ret = new JSONObject();
+        JSONArray aux = new JSONArray();
+
+        aux.addAll(connectors.keySet());
+
+        ret.put("Connections",aux);
 
         return ret;
     }

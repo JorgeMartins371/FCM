@@ -2,6 +2,11 @@ package G27.Central.utils.zabbix;
 
 public class ZabbixPaths {
 
+    public static final String CONNECTIONS_PATH = "/connections";
+    public static final String STOREDCONNECTIONS_PATH = "/storedCon";
+    public static final String INSERTCONNECTION_PATH = "/storeCon";
+    public static final String USERS_PATH = "/users";
+
     public static final String ZABBIX_CON = "/zabbixCon";
 
     public static final String REGISTER = "/register";

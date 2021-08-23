@@ -46,7 +46,7 @@ public class EventController {
 
         RequestBuilder aux = RequestBuilder.newBuilder().method("event.get").paramEntry("output","extend")
                 .paramEntry("select_acknowledges","extend").paramEntry("selectTags","extend")
-                .paramEntry("selectSurpressionData","extend");
+                .paramEntry("selectSurpressionData","extend").paramEntry("value",1);
 
         if(!body.getJSONArray("severities").isEmpty()) aux.paramEntry("severities",body.getJSONArray("severities"));
 
