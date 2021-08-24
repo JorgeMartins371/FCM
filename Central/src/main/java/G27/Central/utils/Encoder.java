@@ -12,6 +12,7 @@ public class Encoder {
     }
 
     public static String decoder(String encoded){
-        return Arrays.toString(Base64.getDecoder().decode(encoded));
+        byte[] decodedBytes = Base64.getDecoder().decode(encoded);
+        return new String(decodedBytes);
     }
 }

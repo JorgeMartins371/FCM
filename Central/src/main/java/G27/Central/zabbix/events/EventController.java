@@ -1,5 +1,7 @@
 package G27.Central.zabbix.events;
 
+import G27.Central.DB.Connection;
+import G27.Central.DB.repositories.ConnectionRepository;
 import G27.Central.connectors.ConnectorController;
 import G27.Central.connectors.Zabbix.ZabbixConnector;
 import G27.Central.utils.Request;
@@ -8,6 +10,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.fasterxml.jackson.annotation.JsonAlias;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.LinkedList;
@@ -20,6 +23,8 @@ import static G27.Central.utils.zabbix.ZabbixPaths.*;
 public class EventController {
 
     private ZabbixConnector api;
+    @Autowired
+    private ConnectionRepository cr;
 
     @GetMapping(EVENT_PATH)
     public JSONObject getEvent(@PathVariable String iid){
@@ -42,7 +47,12 @@ public class EventController {
 
     @PostMapping(EVENT_PATH)
     public JSONObject getSpecificEventS(@PathVariable String iid, @RequestBody JSONObject body){
-        api = ConnectorController.getZab(iid);
+
+        if(!ConnectorController.hasZabCon(iid)){
+            Connection c = cr.findByid(iid);
+            api = ConnectorController.buildConZab(c.getID(),c.getIP(),c.getUser(),c.getEncoded());
+        }else api = ConnectorController.getZab(iid);
+
 
         RequestBuilder aux = RequestBuilder.newBuilder().method("event.get").paramEntry("output","extend")
                 .paramEntry("select_acknowledges","extend").paramEntry("selectTags","extend")

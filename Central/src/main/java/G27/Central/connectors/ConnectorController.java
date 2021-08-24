@@ -5,6 +5,7 @@ import G27.Central.DB.User;
 import G27.Central.DB.repositories.ConnectionRepository;
 import G27.Central.DB.repositories.UserRepository;
 import G27.Central.connectors.Zabbix.ZabbixConnector;
+import G27.Central.utils.Encoder;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -21,9 +23,12 @@ import static G27.Central.utils.zabbix.ZabbixPaths.*;
 @RestController
 public class ConnectorController {
 
-    private ZabbixConnector zab;
+    private static ZabbixConnector zab;
     private static final AtomicInteger nextId = new AtomicInteger(0);
     private static HashMap<String,ZabbixConnector> connectors = new HashMap<>();
+
+    @Autowired
+    private ConnectionRepository cr;
 
     @GetMapping(ZABBIX_CON)
     public void getZabbixCon(){
@@ -80,5 +85,29 @@ public class ConnectorController {
 
     public static ZabbixConnector getZab(String id){
         return connectors.get(id);
+    }
+
+    public static boolean hasZabCon(String id){
+        return connectors.containsKey(id);
+    }
+
+    public static ZabbixConnector buildConZab(String id,String ip,String user, String encoded){
+
+        String url = "http://" + ip + "/zabbix/api_jsonrpc.php";
+
+        zab = new ZabbixConnector(url);
+        zab.init();
+
+        connectors.put(id,zab);
+
+        String auxPass = Encoder.decoder(encoded);
+
+        String logPass = auxPass.split(":")[1];
+
+        boolean login = zab.login(user, logPass);
+
+        System.out.println("Login result= " + login);
+
+        return zab;
     }
 }

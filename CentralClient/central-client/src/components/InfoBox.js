@@ -9,11 +9,17 @@ const InfoBox = () => {
     const [events, setEvents] = useState()
     const [state, setState] = useContext(GlobalState);
 
+    let firstLoad = true;
+
     useEffect(() => {
         if(state.Filter == true){
             getEvents()
             setState(state => ({...state, Filter: false}));
-        } 
+        }
+        if(firstLoad){
+             getEvents()
+             firstLoad=false;
+         } 
     }, [state.Ack, state.Filter])
 
     function getEvents(){
@@ -35,34 +41,42 @@ const InfoBox = () => {
 
         console.log(options)
 
-        const token = fetchData('http://localhost:8080/' + state.Con + '/event',options)
+        const token = fetchData('http://localhost:8080/Zabbix1/event',options)
         .then(res => {
             setEvents(res.data.result)
         })
     }
 
     return (
-        <div>
+        <Container fluid>
             {events !== undefined ? 
-            <ListGroup>
-                <Row>
-                    <Col><h5>Provider</h5></Col>
-                    <Col><h5>Host</h5></Col>
-                    <Col md={8}><h5>Problem</h5></Col>
-                    <Col md={2}><h5>Time</h5></Col>
-                    <Col><h5>Severity</h5></Col>
-                </Row>
-                {events.map(event => {
-                    return(
-                        <Event key={event.eventid} event={event}/>
-                    )
-                })}
-            </ListGroup> : 
+            <table className="table table-hover table-responsive mb-0">
+
+            <thead>
+                <tr>
+                    <th className="th-lg"><a>Provider</a></th>
+                    <th className="th-lg"><a>Host</a></th>
+                    <th className="th-lg"><a>Problem</a></th>
+                    <th className="th-lg"><a>Time</a></th>
+                    <th className="th-lg"><a>Severity</a></th>
+                    <th className="th-lg"><a>Acknowledged</a></th>
+                </tr>
+            </thead>
+
+                <tbody>
+                    {events.map(event => {
+                        return(
+                            <Event key={event.eventid} event={event}/>
+                        )
+                    })}
+                </tbody>
+
+            </table> : 
             <Container>
                 <h4>No events to show...</h4>
             </Container>
              }
-        </div>
+        </Container>
     )
 }
 

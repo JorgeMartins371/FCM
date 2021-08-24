@@ -21,20 +21,6 @@ public class UserController {
     @Autowired
     private UserRepository ur;
 
-    @PostMapping(REGISTER)
-    public JSONObject register(@RequestBody JSONObject user){
-
-        String encoded = Encoder.encoder(user.getString("username"), user.getString("password"));
-
-        User newUser = new User(encoded, user.getString("username"),user.getBoolean("admin"));
-        ur.save(newUser);
-
-        JSONObject ret = new JSONObject();
-        ret.put("User",newUser);
-
-        return ret;
-    }
-
     @PostMapping(LOGIN)
     public JSONObject login(@RequestBody JSONObject user){
 

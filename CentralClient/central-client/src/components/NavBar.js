@@ -16,12 +16,13 @@ const NavBar = () => {
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="me-auto">
-            <Link to="/dashboard"> {localStorage.getItem("isAdmin") ? "Config" : ""}</Link>
-                <br/>
-                <Link to="/events">Events</Link>
-                <br/>
-                {!state.isLog && localStorage.getItem("user")===null ? <Link to='/'>Login</Link> : <Link to='/logout'>Logout</Link>}
-                <br/>
+            <Link to="/connections"> {localStorage.getItem("isAdmin") ? "Setup Connections " : ""}</Link>
+            <Link to="/users"> {localStorage.getItem("isAdmin") ? "Configure Users " : ""}</Link>
+            <br/>
+            <Link to="/events">Events</Link>
+            <br/>
+            {!state.isLog && localStorage.getItem("user")===null ? <Link to='/'>Login</Link> : <Link to='/logout'>Logout</Link>}
+            <br/>
             </Nav>
             </Navbar.Collapse>
         </Container>

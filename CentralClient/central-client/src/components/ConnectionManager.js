@@ -3,16 +3,16 @@ import { Form, Col, Button, Container } from 'react-bootstrap'
 import { fetchData } from '../utils/Fetcher';
 import { useHistory } from "react-router-dom";
 import GlobalState from '../utils/GlobalState';
-import AddConnection from './AddConnection';
+import StoreCon from './StoreCon';
 import RemoveConnection from './RemoveConnection';
 import CurrentConnections from './CurrentConnections';
 
-const Dashboard = () => {
+const ConnectionManager = () => {
 
     const [state, setState] = useContext(GlobalState);
-    const [ip, setIP] = useState();
-    const [user, setUser] = useState();
-    const [pass, setPass] = useState();
+    // const [ip, setIP] = useState();
+    // const [user, setUser] = useState();
+    // const [pass, setPass] = useState();
     const [users, setUsers] = useState([])
 
     useEffect(() => {
@@ -78,7 +78,7 @@ const Dashboard = () => {
                 <div className="row">
                     
                     <div className="col-md-12">
-                        <h2 class="py-3 text-center font-bold font-up blue-text">Users</h2>
+                        <h2 class="py-3 text-center font-bold font-up blue-text">Connections</h2>
                     </div>
                     
                 </div>
@@ -105,7 +105,7 @@ const Dashboard = () => {
                                 <td>{user.name}</td>
                                 <td>{user.admin ? "yes" : "no"}</td>
                                 <td>
-                                    <AddConnection/>
+                                    <StoreCon/>
                                 </td>
                                 <td>
                                     <RemoveConnection/>
@@ -241,4 +241,4 @@ const Dashboard = () => {
     
 }
 
-export default Dashboard
+export default ConnectionManager

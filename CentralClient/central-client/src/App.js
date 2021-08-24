@@ -1,7 +1,7 @@
 import NavBar from './components/NavBar.js'
 import Login from './components/Login.js'
 import InfoBox from './components/InfoBox.js'
-import Dashboard from './components/Dashboard.js';
+import ConnectionManager from './components/ConnectionManager.js';
 import EventFilter from './components/EventFilter.js';
 import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
 import AcknowledgeInfo from './components/AcknowledgeInfo.js';
@@ -9,6 +9,7 @@ import { useState } from 'react'
 import GlobalState from './utils/GlobalState.js';
 import Configuration from './components/Configuration.js';
 import Logout from './components/Logout.js';
+import UserManager from './components/UserManager.js';
 
 
 function App() {
@@ -42,7 +43,8 @@ function App() {
               <InfoBox/>
             </Route>
             <Route exact path='/ack/:aid' component={AcknowledgeInfo} />
-            <Route exact path='/dashboard' component={Dashboard} />
+            <Route exact path='/connections' component={ConnectionManager} />
+            <Route exact path='/users' component={UserManager}/>
             <Route exact path='/logout' component={Logout}/>
           </Router>
       </GlobalState.Provider>

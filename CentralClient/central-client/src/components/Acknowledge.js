@@ -38,7 +38,7 @@ const Acknowledge = (eid) => {
         }
 
         console.log(options)
-        const resp = fetchData('http://localhost:8080/1/event/ack',options)
+        const resp = fetchData('http://localhost:8080/Zabbix1/event/ack',options)
          .then(res => {
             setState(state => ({...state, Ack: res}));
          })

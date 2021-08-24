@@ -8,10 +8,9 @@ import G27.Central.utils.Encoder;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import javax.transaction.Transactional;
 
 import static G27.Central.utils.zabbix.ZabbixPaths.*;
 
@@ -22,6 +21,32 @@ public class AdminController {
     private ConnectionRepository cr;
     @Autowired
     private UserRepository ur;
+
+    @PostMapping(REGISTER)
+    public JSONObject register(@RequestBody JSONObject user){
+
+        String encoded = Encoder.encoder(user.getString("username"), user.getString("password"));
+
+        User newUser = new User(encoded, user.getString("username"),user.getBoolean("admin"));
+        ur.save(newUser);
+
+        JSONObject ret = new JSONObject();
+        ret.put("User",newUser);
+
+        return ret;
+    }
+
+    @Transactional
+    @DeleteMapping(USERS_PATH)
+    public JSONObject unregister(@RequestBody JSONObject user){
+
+        int result = ur.deleteUserByName(user.getString("username"));
+
+        JSONObject ret = new JSONObject();
+        ret.put("Result",result);
+
+        return ret;
+    }
 
     @GetMapping(STOREDCONNECTIONS_PATH)
     public JSONObject getStoredConnections(){
