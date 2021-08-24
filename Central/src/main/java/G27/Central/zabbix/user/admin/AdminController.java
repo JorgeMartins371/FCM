@@ -20,6 +20,7 @@ public class AdminController {
 
     @Autowired
     private ConnectionRepository cr;
+    @Autowired
     private UserRepository ur;
 
     @GetMapping(STOREDCONNECTIONS_PATH)

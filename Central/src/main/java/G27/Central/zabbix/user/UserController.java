@@ -3,16 +3,17 @@ package G27.Central.zabbix.user;
 import G27.Central.DB.User;
 import G27.Central.DB.repositories.UserRepository;
 import G27.Central.utils.Encoder;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Base64;
 
-import static G27.Central.utils.zabbix.ZabbixPaths.LOGIN;
-import static G27.Central.utils.zabbix.ZabbixPaths.REGISTER;
+import static G27.Central.utils.zabbix.ZabbixPaths.*;
 
 @RestController
 public class UserController {
@@ -42,7 +43,7 @@ public class UserController {
         User aux = ur.findByEncoded(encoded);
         if(aux != null){
             JSONObject ret = new JSONObject();
-            ret.put("Encoded", aux.getEncoded());
+            ret.put("User",aux.getName());
             ret.put("Admin",aux.isAdmin());
             return ret;
         }
