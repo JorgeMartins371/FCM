@@ -3,8 +3,7 @@ import {Button, Modal, Form, Row, Col, Container} from 'react-bootstrap'
 import { fetchData } from '../../utils/Fetcher';
 import GlobalState from '../../utils/GlobalState';
 
-
-const RemoveConnection = ({allCons,userCons,user}) => {
+const AddConnectionUser = ({allCons,userCons,user}) => {
 
     const [state, setState] = useContext(GlobalState);
     const [show, setShow] = useState(false)
@@ -14,8 +13,9 @@ const RemoveConnection = ({allCons,userCons,user}) => {
     const handleClose = () => setShow(false)
     const handleShow = () => setShow(true)
 
-    var includedCons = []
+    var notIncludedCons = []
     let containsID = false
+    console.log(user)
 
     useEffect(() => {
         if(update){
@@ -24,11 +24,12 @@ const RemoveConnection = ({allCons,userCons,user}) => {
         } 
      },[update])
 
+    //Filter connections associated with User
     const a = allCons.map(con => {
         userCons.map(userCon => {
             if(con.id == userCon.id) containsID = true
         })
-        if(containsID) includedCons = [...includedCons,con]
+        if(!containsID) notIncludedCons = [...notIncludedCons,con]
         else containsID=false
     })
 
@@ -40,7 +41,7 @@ const RemoveConnection = ({allCons,userCons,user}) => {
             cons
         }
         let options = {
-            method: 'DELETE',
+            method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
@@ -70,31 +71,31 @@ const RemoveConnection = ({allCons,userCons,user}) => {
 
     return (
         <Container>
-        <Button variant="danger" onClick={handleShow}>
-            Remove Connections
+        <Button variant="success" onClick={handleShow}>
+            Add Connections
         </Button>
 
         <Modal show={show} onHide={handleClose}>
             <Modal.Header closeButton>
-            <Modal.Title>Remove Connections</Modal.Title>
+            <Modal.Title>Add Connections</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-            <Form>
-                <Form.Group as={Col} className="mb-3" controlId="AddCon" Key="Add">
-                    <Col sm={10}>
-                    {includedCons.map(con => {
-                        return(
-                            <Form.Check 
-                            type="radio" 
-                            label={con.id}
-                            name ="checkbox" 
-                            onChange={handleAddCon} 
-                            id={con.id}/>
-                        )
-                    })}
-                    </Col>
-                </Form.Group>
-            </Form>
+                <Form>
+                    <Form.Group as={Col} className="mb-3" controlId="AddCon" Key="Add">
+                        <Col sm={10}>
+                        {notIncludedCons.map(con => {
+                            return(
+                                <Form.Check 
+                                type="checkbox" 
+                                label={con.id}
+                                name ="checkbox" 
+                                onChange={handleAddCon} 
+                                id={con.id}/>
+                            )
+                        })}
+                        </Col>
+                    </Form.Group>
+                </Form>
             </Modal.Body>
             <Modal.Footer>
             <Button variant="danger" onClick={handleClose}>
@@ -109,4 +110,4 @@ const RemoveConnection = ({allCons,userCons,user}) => {
     )
 }
 
-export default RemoveConnection
+export default AddConnectionUser

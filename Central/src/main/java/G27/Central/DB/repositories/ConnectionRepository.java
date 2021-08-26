@@ -10,4 +10,5 @@ public interface ConnectionRepository extends CrudRepository<Connection, String>
     Connection findByUser(String user);
     Connection findByEncoded(String encoded);
     Connection save(Connection connection);
+    int deleteConnectionById(String id);
 }

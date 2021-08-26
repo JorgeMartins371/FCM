@@ -47,9 +47,14 @@ public class AdminUserController {
     @DeleteMapping(USERS_PATH)
     public JSONObject unregister(@RequestBody JSONObject user){
 
-        int result = ur.deleteUserByName(user.getString("username"));
+        String username = user.getString("username");
+
+        int i = deleteAssociation(ucr.findByUsername(username));
+
+        int result = ur.deleteUserByName(username);
 
         JSONObject ret = new JSONObject();
+        ret.put("Associations removed",i);
         ret.put("Result",result);
 
         return ret;
@@ -122,5 +127,15 @@ public class AdminUserController {
         return body;
     }
 
+    @Transactional
+    private int deleteAssociation(List<User_Connection> cons){
+
+        int ret=0;
+
+        for (User_Connection aux: cons) {
+            ret+=ucr.deleteConById(aux.getID());
+        }
+        return ret;
+    }
 
 }

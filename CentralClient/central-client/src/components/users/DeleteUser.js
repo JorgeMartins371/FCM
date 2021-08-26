@@ -17,22 +17,22 @@ const DeleteUser = ({username}) => {
         e.preventDefault()
 
 
-         let payload = {
-             username,
-         }
-         let options = {
-             method: 'DELETE',
-             headers: {
-                 'Content-Type': 'application/json'
-             },
-             body: JSON.stringify(payload)
-         }
+        let payload = {
+            username,
+        }
+        let options = {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(payload)
+        }
 
-         const resp = fetchData('http://localhost:8080/users',options)
-            .then(res => {
-               console.log(res)
-               setState(state => ({...state, User: res}));
-            })
+        const resp = fetchData('http://localhost:8080/users',options)
+        .then(res => {
+            console.log(res)
+            setState(state => ({...state, User: res}));
+        })
         handleClose()
     }
 

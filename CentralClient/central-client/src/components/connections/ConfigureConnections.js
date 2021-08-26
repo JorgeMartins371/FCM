@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react'
 import {Button, Modal, Form, Row, Col, Container} from 'react-bootstrap'
 import StoredConnections from '../StoredConnections'
-import RemoveConnection from '../users/RemoveConnection';
-import AddConnectionUser from '../users/AddConnectionUser';
+import RemoveConnection from './RemoveConnection';
+import AddConnectionUser from './AddConnectionUser';
 import { fetchData } from '../../utils/Fetcher';
 
 const ConfigureConnections = ({connections,user}) => {
@@ -32,7 +32,7 @@ const ConfigureConnections = ({connections,user}) => {
                 Configure
             </Button>
 
-            <Modal show={show} onHide={handleClose}>
+            <Modal show={show} onHide={handleClose} size="lg">
                 <Modal.Header closeButton>
                 <Modal.Title>{user.name} Connections Configuration</Modal.Title>
                 </Modal.Header>

@@ -121,26 +121,26 @@ const ConnectionManager = () => {
                 </div>
                     <div>
                     <Button variant="primary" onClick={handleShow}>
-                        Show All Connections
+                        Manage Connections
                     </Button>
-                    <Modal show={show} onHide={handleClose}>
+                    <Modal show={show} onHide={handleClose} size="xl">
                         <Modal.Header closeButton>
                         <Modal.Title>System Available Connections</Modal.Title>
                         </Modal.Header>
                         <Modal.Body>
                             <StoredConnections 
                             connections={connections}
-                            title={'Connections'}/>
+                            title={'Connections'}
+                            remove={true}/>
                         </Modal.Body>
                         <Modal.Footer>
+                        <StoreCon/>
                         <Button variant="danger" onClick={handleClose}>
                             Close
                         </Button>
                         </Modal.Footer>
                     </Modal>
                     </div>
-                    <StoreCon/>
-                    <DeleteConnection connections={connections}/> 
             </div>
         </Container>
         )

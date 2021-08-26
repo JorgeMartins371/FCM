@@ -1,6 +1,7 @@
 import {Container} from 'react-bootstrap'
+import DeleteConnection from './connections/DeleteConnection'
 
-const StoredConnections = ({connections,title}) => {
+const StoredConnections = ({connections,title,remove}) => {
 
     let i=0
 
@@ -26,6 +27,9 @@ const StoredConnections = ({connections,title}) => {
                             <th className="th-lg"><a>IP</a></th>
                             <th className="th-lg"><a>Tool</a></th>
                             <th className="th-lg"><a>Server User</a></th>
+                            {remove === true ? 
+                            <th className="th-lg"><a>Delete Connection</a></th> :
+                            <></>}
                         </tr>
                     </thead>
 
@@ -39,6 +43,9 @@ const StoredConnections = ({connections,title}) => {
                                 <td>{connection.ip}</td>
                                 <td>{connection.tool}</td>
                                 <td>{connection.user}</td>
+                                {remove!== undefined ? 
+                                <td className="th-lg"><a>{<DeleteConnection connection={connection}/>}</a></td> :
+                                <></>}
                                 </tr>
                             )
                         })}

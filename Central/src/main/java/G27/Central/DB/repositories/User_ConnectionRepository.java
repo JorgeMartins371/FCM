@@ -17,7 +17,9 @@ public interface User_ConnectionRepository extends CrudRepository<User_Connectio
     @Query("select id from User_Connection where username=:username and conID=:conID")
     long queryByUserAndCon(String username,String conID);
 
-    User_Connection findByConID(String conID);
+    List<User_Connection> findByConID(String conID);
+
+    List<User_Connection> findByUsername(String username);
 
     User_Connection save(User_Connection user_connection);
 
