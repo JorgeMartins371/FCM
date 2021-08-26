@@ -1,4 +1,4 @@
-import { useState, useContext } from 'react'
+import { useState, useContext, useEffect } from 'react'
 import { Container, Form, Col, Row, DropdownButton, Button } from 'react-bootstrap'
 import GlobalState from '../utils/GlobalState';
 
@@ -7,6 +7,10 @@ const EventFilter = () => {
     const [state, setState] = useContext(GlobalState);
 
     let auxSev = [], auxAck = [false,false]
+
+    //Provavelmente chamar useEffect para dar reset nos botoes
+
+    useEffect(() => {},[state.Filter])
 
     const handleSubmit = e => {
         e.preventDefault()

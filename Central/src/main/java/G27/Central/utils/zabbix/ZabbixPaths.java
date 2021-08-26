@@ -2,14 +2,19 @@ package G27.Central.utils.zabbix;
 
 public class ZabbixPaths {
 
+    //Admin End-Points
     public static final String CONNECTIONS_PATH = "/connections";
     public static final String STOREDCONNECTIONS_PATH = "/storedCon";
-    public static final String INSERTCONNECTION_PATH = "/storeCon";
+    public static final String CONNECTIONS_USER_PATH = CONNECTIONS_PATH + "/{user}";
+
     public static final String USERS_PATH = "/users";
 
     public static final String ZABBIX_CON = "/zabbixCon";
 
     public static final String REGISTER = "/register";
+
+    //Standart User End-Points
+
     public static final String LOGIN = "/login";
 
     public static final String INSTANCE_ID = "/{iid}";

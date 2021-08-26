@@ -1,8 +1,8 @@
 import React from 'react'
 import { useState, useContext } from 'react'
 import {Button, Modal, Form, Row, Col, Container} from 'react-bootstrap'
-import { fetchData } from '../utils/Fetcher';
-import GlobalState from '../utils/GlobalState';
+import { fetchData } from '../../utils/Fetcher';
+import GlobalState from '../../utils/GlobalState';
 
 const DeleteUser = ({username}) => {
 

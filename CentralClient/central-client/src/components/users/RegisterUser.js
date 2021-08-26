@@ -1,8 +1,7 @@
-import React from 'react'
 import { useState, useContext } from 'react'
 import {Button, Modal, Form, Row, Col, Container} from 'react-bootstrap'
-import { fetchData } from '../utils/Fetcher';
-import GlobalState from '../utils/GlobalState';
+import { fetchData } from '../../utils/Fetcher';
+import GlobalState from '../../utils/GlobalState';
 
 const RegisterUser = () => {
 
@@ -54,7 +53,7 @@ const RegisterUser = () => {
 
     return (
         <Container>
-        <Button variant="primary" onClick={handleShow}>
+        <Button variant="success" onClick={handleShow}>
             Register user
         </Button>
 

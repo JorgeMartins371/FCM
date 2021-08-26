@@ -48,34 +48,36 @@ const InfoBox = () => {
     }
 
     return (
-        <Container fluid>
-            {events !== undefined ? 
-            <table className="table table-hover table-responsive mb-0">
+        <Container>
+            <div className="row justify-content-md-center">
+                {events !== undefined ? 
+                <table className="table table-hover table-responsive mb-0">
 
-            <thead>
-                <tr>
-                    <th className="th-lg"><a>Provider</a></th>
-                    <th className="th-lg"><a>Host</a></th>
-                    <th className="th-lg"><a>Problem</a></th>
-                    <th className="th-lg"><a>Time</a></th>
-                    <th className="th-lg"><a>Severity</a></th>
-                    <th className="th-lg"><a>Acknowledged</a></th>
-                </tr>
-            </thead>
+                <thead>
+                    <tr>
+                        <th className="th-lg"><a>Provider</a></th>
+                        <th className="th-lg"><a>Host</a></th>
+                        <th className="th-lg"><a>Problem</a></th>
+                        <th className="th-lg"><a>Time</a></th>
+                        <th className="th-lg"><a>Severity</a></th>
+                        <th className="th-lg"><a>Acknowledged</a></th>
+                    </tr>
+                </thead>
 
-                <tbody>
-                    {events.map(event => {
-                        return(
-                            <Event key={event.eventid} event={event}/>
-                        )
-                    })}
-                </tbody>
+                    <tbody>
+                        {events.map(event => {
+                            return(
+                                <Event key={event.eventid} event={event}/>
+                            )
+                        })}
+                    </tbody>
 
-            </table> : 
-            <Container>
-                <h4>No events to show...</h4>
-            </Container>
-             }
+                </table> : 
+                <Container>
+                    <h4>No events to show...</h4>
+                </Container>
+                }
+            </div>
         </Container>
     )
 }

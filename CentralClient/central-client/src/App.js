@@ -1,15 +1,15 @@
 import NavBar from './components/NavBar.js'
 import Login from './components/Login.js'
-import InfoBox from './components/InfoBox.js'
-import ConnectionManager from './components/ConnectionManager.js';
-import EventFilter from './components/EventFilter.js';
+import InfoBox from './events/InfoBox.js'
+import ConnectionManager from './components/connections/ConnectionManager.js';
+import EventFilter from './events/EventFilter.js';
 import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
-import AcknowledgeInfo from './components/AcknowledgeInfo.js';
+import AcknowledgeInfo from './events/AcknowledgeInfo.js';
 import { useState } from 'react'
 import GlobalState from './utils/GlobalState.js';
 import Configuration from './components/Configuration.js';
 import Logout from './components/Logout.js';
-import UserManager from './components/UserManager.js';
+import UserManager from './components/users/UserManager.js';
 
 
 function App() {

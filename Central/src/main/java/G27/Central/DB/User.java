@@ -5,9 +5,10 @@ import javax.persistence.*;
 @Entity
 @Table(name = "User")
 public class User {
+
     @Id
-    private String encoded;
     private String name;
+    private String encoded;
     private boolean admin;
 
     public User(){

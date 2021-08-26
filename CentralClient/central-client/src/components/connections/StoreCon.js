@@ -1,6 +1,6 @@
 import { useState, useContext } from 'react'
 import {Button, Modal, Form, Row, Col, Container} from 'react-bootstrap'
-import { fetchData } from '../utils/Fetcher';
+import { fetchData } from '../../utils/Fetcher';
 
 const StoreCon = () => {
 
@@ -35,7 +35,7 @@ const StoreCon = () => {
             body: JSON.stringify(payload)
         }
 
-         const resp = fetchData('http://localhost:8080/storeCon',options)
+         const resp = fetchData('http://localhost:8080/storedCon',options)
           .then(res => {
              console.log(res)
           })
@@ -54,13 +54,13 @@ const StoreCon = () => {
 
     return (
         <Container>
-            <Button variant="primary" onClick={handleShow}>
-                Add
+            <Button variant="success" onClick={handleShow}>
+                Register New Connection
             </Button>
 
             <Modal show={show} onHide={handleClose}>
                 <Modal.Header closeButton>
-                <Modal.Title>Add Connection</Modal.Title>
+                <Modal.Title>Register New Connection</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <Form>

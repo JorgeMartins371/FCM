@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
 import { Container, Form, Col, Row, Button } from 'react-bootstrap'
 import PropTypes from 'prop-types'
 import { fetchData } from '../utils/Fetcher';
@@ -13,6 +13,10 @@ const Login = () => {
     const [state, setState] = useContext(GlobalState);
 
     let history = useHistory();
+
+    useEffect(() => {
+        
+    },[state.isLog])
     
     const handleSubmit = async e => {
         e.preventDefault()
@@ -32,7 +36,7 @@ const Login = () => {
         fetchData('http://localhost:8080/login',options)
         .then(res => {
             //Needs to be reworked
-            setState(state => ({...state, isLog: true}));
+            setState(state => ({...state, isLog: true}))
             localStorage.setItem('user', res.data.User)
             if(res.data.Admin){
                 localStorage.setItem('isAdmin', res.data.Admin)
