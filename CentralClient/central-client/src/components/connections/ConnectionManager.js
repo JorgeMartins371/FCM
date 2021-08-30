@@ -35,8 +35,15 @@ const ConnectionManager = () => {
                     setConnections(res.data.Connections)
                     console.log(res)
             })
-        },[]
+        },[state.Update]
     )
+
+    //Consume Message
+    useEffect(() => {
+        setTimeout(() => {
+            setState(state => ({...state, Message: undefined}));
+        },4000)
+    }, [state.Status])
 
     let i=0
 
@@ -118,8 +125,9 @@ const ConnectionManager = () => {
                     </div>
                     
                 </div>   
+                </div>             
                 </div>
-                    <div>
+                <div>
                     <Button variant="primary" onClick={handleShow}>
                         Manage Connections
                     </Button>
@@ -139,9 +147,9 @@ const ConnectionManager = () => {
                             Close
                         </Button>
                         </Modal.Footer>
+                        <h5>{state.Message}</h5>
                     </Modal>
                     </div>
-            </div>
         </Container>
         )
     }

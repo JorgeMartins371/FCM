@@ -1,24 +1,28 @@
 import React, { useState, useContext, useEffect } from 'react'
 import { Container, Form, Col, Row, Button } from 'react-bootstrap'
-import PropTypes from 'prop-types'
 import { fetchData } from '../utils/Fetcher';
-import { useHistory, Link } from "react-router-dom";
+import { Redirect } from "react-router-dom";
 import GlobalState from '../utils/GlobalState';
+import { dangerMessage } from '../utils/AlertMessages';
 
 const Login = () => {
 
     const [username, setUserName] = useState();
     const [password, setPassword] = useState();
+    const [msg, setMsg] = useState()
+    const [status, setStatus] = useState()
 
     const [state, setState] = useContext(GlobalState);
 
-    let history = useHistory();
-
-    useEffect(() => {
-        
-    },[state.isLog])
+    //Consume Message
+     useEffect(() => {
+        setTimeout(() => {
+            setMsg()
+        },4000)
+        console.log(msg)
+     },[status])
     
-    const handleSubmit = async e => {
+    const handleSubmit = e => {
         e.preventDefault()
 
         let payload = {
@@ -35,53 +39,62 @@ const Login = () => {
 
         fetchData('http://localhost:8080/login',options)
         .then(res => {
-            //Needs to be reworked
-            setState(state => ({...state, isLog: true}))
-            localStorage.setItem('user', res.data.User)
-            if(res.data.Admin){
-                localStorage.setItem('isAdmin', res.data.Admin)
-                setState(state => ({...state, isAdmin: res.data.Admin}));
+            console.log(res)
+            if(res.err == true){
+                setMsg(dangerMessage("Wrong credentials, please make sure your Username and Password is correct."))
+                setStatus(res)
             }
-             history.push({
-                  pathname:'/events',
-                  state:{
-                      isLog: true,
-                      isAdmin: res.data.Admin
-                   }
-                 });
+            else{
+                setState(state => ({...state, isLog: true}))
+                setState(state => ({...state, user: res.data.User}))
+                localStorage.setItem('user', res.data.User)
+                if(res.data.Admin){
+                    localStorage.setItem('isAdmin', res.data.Admin)
+                    setState(state => ({...state, isAdmin: res.data.Admin}));
+                }
+            }  
         })
     }
 
-    return (
-        <Container>
-                <Row>
-                    <Col>
-                        <h4>Please login.</h4>
-                    </Col>
-                </Row>
-                <Form onSubmit={handleSubmit}>
-                    <Form.Group as={Col}>
-                        <Form.Label column sm="2">
-                            Username
-                        </Form.Label>
-                        <Col sm="10">
-                            <Form.Control required name="username"  type= "text" placeholder="username" onChange={e => setUserName(e.target.value)}/>                        
+    if(state.isLog === undefined || state.isLog === false){
+        return (
+            <Container>
+                    <Row>
+                        <Col>
+                            <h4>Please login.</h4>
                         </Col>
-                    </Form.Group>
-                    <Form.Group as={Col}>
-                        <Form.Label column sm="2">
-                            Password
-                        </Form.Label>
-                        <Col sm="10">
-                            <Form.Control required name="password"  type= "password" placeholder="password" onChange={e => setPassword(e.target.value)}/>                        
-                        </Col>
-                    </Form.Group>
-                <Button variant="primary" type="submit">
-                    Submit
-                </Button>
-                </Form>
-            </Container>
-    )
+                    </Row>
+                    <Form onSubmit={handleSubmit}>
+                        <Form.Group as={Col}>
+                            <Form.Label column sm="2">
+                                Username
+                            </Form.Label>
+                            <Col sm="10">
+                                <Form.Control required name="username"  type= "text" placeholder="username" onChange={e => setUserName(e.target.value)}/>                        
+                            </Col>
+                        </Form.Group>
+                        <Form.Group as={Col}>
+                            <Form.Label column sm="2">
+                                Password
+                            </Form.Label>
+                            <Col sm="10">
+                                <Form.Control required name="password"  type= "password" placeholder="password" onChange={e => setPassword(e.target.value)}/>                        
+                            </Col>
+                        </Form.Group>
+                    <Button variant="primary" type="submit">
+                        Submit
+                    </Button>
+                    </Form>
+                    <h5>{msg}</h5>
+                </Container>
+        )
+    }
+    else{
+        return(
+            <Redirect to='/events'/>
+        )
+    }
+    
     
 }
 

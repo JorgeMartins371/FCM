@@ -8,11 +8,14 @@ const Logout = () => {
 
     const [state, setState] = useContext(GlobalState);
 
+
     setTimeout(() => {
         history.push('/')
+        setState(state => ({...state, isLog: false}))
     },2000)
 
     localStorage.clear()
+    
     
     return (
         <div>

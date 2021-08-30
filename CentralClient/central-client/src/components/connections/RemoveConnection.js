@@ -29,7 +29,7 @@ const RemoveConnection = ({allCons,userCons,user}) => {
             if(con.id == userCon.id) containsID = true
         })
         if(containsID) includedCons = [...includedCons,con]
-        else containsID=false
+        containsID=false
     })
 
     const handleSubmit = e => {
@@ -49,8 +49,7 @@ const RemoveConnection = ({allCons,userCons,user}) => {
 
         const resp = fetchData('http://localhost:8080/connections/'+user.name,options)
            .then(res => {
-              console.log(res)
-              alert('Success')
+                setState(state => ({...state, Update: res}));
            })
 
         setUpdate(true)

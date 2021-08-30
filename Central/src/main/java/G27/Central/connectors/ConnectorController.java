@@ -2,20 +2,20 @@ package G27.Central.connectors;
 
 import G27.Central.DB.Connection;
 import G27.Central.DB.User;
+import G27.Central.DB.User_Connection;
 import G27.Central.DB.repositories.ConnectionRepository;
 import G27.Central.DB.repositories.UserRepository;
+import G27.Central.DB.repositories.User_ConnectionRepository;
 import G27.Central.connectors.Zabbix.ZabbixConnector;
 import G27.Central.utils.Encoder;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static G27.Central.utils.zabbix.ZabbixPaths.*;
@@ -27,6 +27,8 @@ public class ConnectorController {
     private static final AtomicInteger nextId = new AtomicInteger(0);
     private static HashMap<String,ZabbixConnector> connectors = new HashMap<>();
 
+    @Autowired
+    private User_ConnectionRepository ucr;
     @Autowired
     private ConnectionRepository cr;
 
@@ -79,6 +81,27 @@ public class ConnectorController {
         aux.addAll(connectors.keySet());
 
         ret.put("Connections",aux);
+
+        return ret;
+    }
+
+    @GetMapping(CONNECTIONS_USER_PATH)
+    public JSONObject getConnectionsOfUsers(@PathVariable String user){
+
+        List<String> uc = ucr.queryByUsername(user);
+
+        JSONObject ret = new JSONObject();
+        JSONArray cons = new JSONArray();
+
+        Connection con;
+
+        for (String conID : uc) {
+            con = cr.findByid(conID);
+            cons.add(con);
+
+        }
+
+        ret.put("Connections",cons);
 
         return ret;
     }

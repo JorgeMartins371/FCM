@@ -6,11 +6,16 @@ import G27.Central.DB.User_Connection;
 import G27.Central.DB.repositories.ConnectionRepository;
 import G27.Central.DB.repositories.UserRepository;
 import G27.Central.DB.repositories.User_ConnectionRepository;
+import G27.Central.exceptions.user.SelfDeleteException;
+import G27.Central.exceptions.user.UserAlreadyExistsException;
+import G27.Central.exceptions.user.UserNotFoundException;
 import G27.Central.utils.Encoder;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.transaction.Transactional;
 
@@ -32,6 +37,13 @@ public class AdminUserController {
     @PostMapping(REGISTER)
     public JSONObject register(@RequestBody JSONObject user){
 
+        try{
+            User aux = ur.findByName(user.getString("username"));
+            if(aux!=null) throw new UserNotFoundException("User Already Exists");
+        }catch (UserAlreadyExistsException e){
+            throw new ResponseStatusException(HttpStatus.CONFLICT,"User Already Exists",e);
+        }
+
         String encoded = Encoder.encoder(user.getString("username"), user.getString("password"));
 
         User newUser = new User(encoded, user.getString("username"),user.getBoolean("admin"));
@@ -48,6 +60,12 @@ public class AdminUserController {
     public JSONObject unregister(@RequestBody JSONObject user){
 
         String username = user.getString("username");
+
+        if(username.equals(user.getString("admin"))) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT,
+                                            "Cannot delete self",
+                                            new SelfDeleteException("Cannot delete self"));
+        }
 
         int i = deleteAssociation(ucr.findByUsername(username));
 
@@ -73,27 +91,6 @@ public class AdminUserController {
             users.add(u);
         }
         ret.put("Users",users);
-        return ret;
-    }
-
-    @GetMapping(CONNECTIONS_USER_PATH)
-    public JSONObject getConnectionsOfUsers(@PathVariable String user){
-
-        List<String> uc = ucr.queryByUsername(user);
-
-        JSONObject ret = new JSONObject();
-        JSONArray cons = new JSONArray();
-
-        Connection con;
-
-        for (String conID : uc) {
-            con = cr.findByid(conID);
-            cons.add(con);
-
-        }
-
-        ret.put("Connections",cons);
-
         return ret;
     }
 

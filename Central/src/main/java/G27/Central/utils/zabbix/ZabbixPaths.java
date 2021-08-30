@@ -5,13 +5,16 @@ public class ZabbixPaths {
     //Admin End-Points
     public static final String CONNECTIONS_PATH = "/connections";
     public static final String STOREDCONNECTIONS_PATH = "/storedCon";
-    public static final String CONNECTIONS_USER_PATH = CONNECTIONS_PATH + "/{user}";
 
     public static final String USERS_PATH = "/users";
 
     public static final String ZABBIX_CON = "/zabbixCon";
 
     public static final String REGISTER = "/register";
+
+    //Shared Paths
+
+    public static final String CONNECTIONS_USER_PATH = CONNECTIONS_PATH + "/{user}";
 
     //Standart User End-Points
 
@@ -23,6 +26,7 @@ public class ZabbixPaths {
     public static final String HOST_PATH_ID = HOST_PATH + "/{eid}";
 
     public static final String TRIGGER_PATH = INSTANCE_ID + "/trigger/{eid}";
+
 
     public static final String EVENT_PATH = INSTANCE_ID + "/event";
     public static final String ACK_PATH = EVENT_PATH + "/ack";

@@ -28,12 +28,14 @@ const UserManager = () => {
         },[state.User]
     )
 
+    //Consume Message
+    useEffect(() => {
+        setTimeout(() => {
+            setState(state => ({...state, Message: undefined}));
+        },4000)
+    }, [state.Status])
+
     let i=0
-
-    const handleSubmit = async e => {
-        e.preventDefault()
-
-    }
 
     if(localStorage.getItem('isAdmin')){
         return(
@@ -115,6 +117,7 @@ const UserManager = () => {
                 </div>
             </div>
             <RegisterUser/>
+            <h5>{state.Message}</h5>
         </div>
         </Container>
         )

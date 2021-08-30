@@ -50,8 +50,7 @@ const AddConnectionUser = ({allCons,userCons,user}) => {
 
         const resp = fetchData('http://localhost:8080/connections/'+user.name,options)
            .then(res => {
-              console.log(res)
-              alert('Success')
+                setState(state => ({...state, Update: res}));
            })
 
         setUpdate(true)

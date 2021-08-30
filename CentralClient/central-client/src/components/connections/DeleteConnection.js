@@ -30,7 +30,7 @@ const DeleteConnection = ({connection}) => {
 
          const resp = fetchData('http://localhost:8080/storedCon',options)
          .then(res => {
-             console.log(res)
+            setState(state => ({...state, Update: res}));
          })
          handleClose()
     }
@@ -58,14 +58,6 @@ const DeleteConnection = ({connection}) => {
                 </Button>
                 </Modal.Footer>
             </Modal.Body>
-            <Modal.Footer>
-            <Button variant="danger" onClick={handleClose}>
-                Close
-            </Button>
-            <Button variant="primary" onClick={handleSubmit}>
-                Confirm
-            </Button>
-            </Modal.Footer>
         </Modal>
     </Container>
     )

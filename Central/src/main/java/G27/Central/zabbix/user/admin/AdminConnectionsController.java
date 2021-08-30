@@ -4,11 +4,14 @@ import G27.Central.DB.Connection;
 import G27.Central.DB.User_Connection;
 import G27.Central.DB.repositories.ConnectionRepository;
 import G27.Central.DB.repositories.User_ConnectionRepository;
+import G27.Central.exceptions.connections.ConnectionAlreadyExistsException;
 import G27.Central.utils.Encoder;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.transaction.Transactional;
 
@@ -46,6 +49,14 @@ public class AdminConnectionsController {
 
     @PostMapping(STOREDCONNECTIONS_PATH)
     public JSONObject registerCon(@RequestBody JSONObject body){
+
+        try{
+            Connection aux = cr.findByid(body.getString("ID"));
+            if(aux != null) throw new ConnectionAlreadyExistsException("Connection already exists");
+        }catch (ConnectionAlreadyExistsException e){
+            throw new ResponseStatusException(HttpStatus.CONFLICT,"Connection Already Exists",e);
+        }
+
 
         String encoded = Encoder.encoder(body.getString("User"),body.getString("Password"));
 

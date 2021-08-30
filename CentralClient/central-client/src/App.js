@@ -5,7 +5,7 @@ import ConnectionManager from './components/connections/ConnectionManager.js';
 import EventFilter from './events/EventFilter.js';
 import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
 import AcknowledgeInfo from './events/AcknowledgeInfo.js';
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import GlobalState from './utils/GlobalState.js';
 import Configuration from './components/Configuration.js';
 import Logout from './components/Logout.js';

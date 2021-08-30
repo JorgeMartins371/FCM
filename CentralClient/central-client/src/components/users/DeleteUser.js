@@ -3,6 +3,7 @@ import { useState, useContext } from 'react'
 import {Button, Modal, Form, Row, Col, Container} from 'react-bootstrap'
 import { fetchData } from '../../utils/Fetcher';
 import GlobalState from '../../utils/GlobalState';
+import { dangerMessage } from '../../utils/AlertMessages';
 
 const DeleteUser = ({username}) => {
 
@@ -16,9 +17,11 @@ const DeleteUser = ({username}) => {
 
         e.preventDefault()
 
+        const admin = localStorage.getItem('user')
 
         let payload = {
             username,
+            admin
         }
         let options = {
             method: 'DELETE',
@@ -30,8 +33,15 @@ const DeleteUser = ({username}) => {
 
         const resp = fetchData('http://localhost:8080/users',options)
         .then(res => {
-            console.log(res)
-            setState(state => ({...state, User: res}));
+            if(res.err == true){
+                console.log(res)
+                setState(state => ({...state, Message: dangerMessage("Error: Cant remove yourself from platform!")}));
+                setState(state => ({...state, Status: res}));
+               }
+                else{
+                    console.log(res)
+                    setState(state => ({...state, User: res}));
+                }
         })
         handleClose()
     }

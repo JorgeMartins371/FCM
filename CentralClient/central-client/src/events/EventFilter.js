@@ -9,15 +9,14 @@ const EventFilter = () => {
     let auxSev = [], auxAck = [false,false]
 
     //Provavelmente chamar useEffect para dar reset nos botoes
-
-    useEffect(() => {},[state.Filter])
-
+    //Ter const faz com que tudo corra
     const handleSubmit = e => {
         e.preventDefault()
 
         setState(state => ({...state, FilterSev: auxSev}));
         setState(state => ({...state, FilterAck: auxAck}));
-        setState(state => ({...state, Filter: true}));
+        if(state.Filter === undefined) setState(state => ({...state, Filter: true}));
+        else setState(state => ({...state, Filter: !state.Filter}));
     }
 
     const handleSevChange = (e) => {

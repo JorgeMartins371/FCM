@@ -5,6 +5,7 @@ import Acknowledge from './Acknowledge.js'
 import MaintenanceIcon from './MaintenanceIcon.js'
 import { fetchData } from '../utils/Fetcher';
 import GlobalState from '../utils/GlobalState';
+import EventInfo from './EventInfo.js'
 
 /*0 - not classified;
 1 - information;
@@ -13,7 +14,7 @@ import GlobalState from '../utils/GlobalState';
 4 - high;
 5 - disaster.*/
 
-const Event = ({event}) => {
+const Event = ({conIds,event}) => {
 
     const name = "null"
     const maintenance_status = "0"
@@ -31,12 +32,11 @@ const Event = ({event}) => {
             'Access-Control-Allow-Headers': 'Authorization'
         })
         let options = { headers }
-        console.log(state.Con)
         fetchData('http://localhost:8080/Zabbix1/host/'+event.objectid,options)
         .then(res => {
-            console.log(res)
+            //console.log(res) 
             setHost(res.data.result[0])
-            console.log(host)
+            //console.log(host)
         })
     }, [])
 
@@ -75,6 +75,7 @@ const Event = ({event}) => {
                     <th>Zabbix1</th>
                     <td>{host.name}{host.maintenance_status === "1" ? <MaintenanceIcon/> : <></>}</td>
                     <td>{event.name}</td>
+                    <td><EventInfo conId={"kek"} event={event}/></td>
                     <td>{getDateFormat(date)}</td>
                     <td style={{backgroundColor : sevColor[1]}} align="center">{sevColor[0]}</td>
                     <td>

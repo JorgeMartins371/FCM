@@ -7,6 +7,7 @@ const StoredConnections = ({connections,title,remove}) => {
 
     return (
         <Container>
+            <div className="row justify-content-md-center">
             <div className="card">
             <div className="card-body">
                 
@@ -86,6 +87,7 @@ const StoredConnections = ({connections,title,remove}) => {
                     
                 </div>
                 
+            </div>
             </div>
             </div>  
         </Container>

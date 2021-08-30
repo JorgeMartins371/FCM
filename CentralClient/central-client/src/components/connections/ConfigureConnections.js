@@ -1,12 +1,14 @@
-import { useState, useEffect } from 'react'
+import React, { useState, useContext, useEffect  } from 'react'
 import {Button, Modal, Form, Row, Col, Container} from 'react-bootstrap'
 import StoredConnections from '../StoredConnections'
 import RemoveConnection from './RemoveConnection';
 import AddConnectionUser from './AddConnectionUser';
 import { fetchData } from '../../utils/Fetcher';
+import GlobalState from '../../utils/GlobalState';
 
 const ConfigureConnections = ({connections,user}) => {
 
+    const [state, setState] = useContext(GlobalState);
     const [show, setShow] = useState(false)
     const [usersCon, setUsersCon] = useState([])
     const handleClose = () => setShow(false)
@@ -23,8 +25,7 @@ const ConfigureConnections = ({connections,user}) => {
                 setUsersCon(res.data.Connections)
                 console.log(res)
         })
-    },[]
-)
+    },[state.Update])
 
     return (
         <Container>

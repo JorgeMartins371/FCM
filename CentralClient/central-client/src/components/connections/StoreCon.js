@@ -1,12 +1,15 @@
 import { useState, useContext } from 'react'
 import {Button, Modal, Form, Row, Col, Container} from 'react-bootstrap'
 import { fetchData } from '../../utils/Fetcher';
+import GlobalState from '../../utils/GlobalState';
+import { dangerMessage } from '../../utils/AlertMessages';
 
 const StoreCon = () => {
 
     const [show, setShow] = useState(false)
     const [Tool, setTool] = useState('')
     const [info, setInfo] = useState([])
+    const [state, setState] = useContext(GlobalState);
 
     const handleClose = () => setShow(false)
     const handleShow = () => setShow(true)
@@ -37,7 +40,14 @@ const StoreCon = () => {
 
          const resp = fetchData('http://localhost:8080/storedCon',options)
           .then(res => {
-             console.log(res)
+            if(res.err == true){
+                console.log(res)
+                setState(state => ({...state, Message: dangerMessage("Error: Connection ID already Exists!")}));
+                setState(state => ({...state, Status: res}));
+               }
+            else{
+                setState(state => ({...state, Update: res}));
+            }
           })
          handleClose()
     }
