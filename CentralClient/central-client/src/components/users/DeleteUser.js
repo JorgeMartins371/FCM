@@ -57,7 +57,7 @@ const DeleteUser = ({username}) => {
             <Modal.Title>Warning</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                <h4>Are you sure want to remove this user?</h4>
+                <h4>Are you sure want to remove user {username}?</h4>
             </Modal.Body>
             <Modal.Footer>
             <Button variant="danger" onClick={handleClose}>

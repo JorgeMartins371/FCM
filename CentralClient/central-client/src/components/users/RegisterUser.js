@@ -46,8 +46,10 @@ const RegisterUser = () => {
                 setState(state => ({...state, Message: dangerMessage("Error: User already Exists!")}));
                 setState(state => ({...state, Status: res}));
                }
-              console.log(res)
-              setState(state => ({...state, User: res}));
+                else{
+                    console.log(res)
+                    setState(state => ({...state, User: res}));
+                }
            })
         handleClose()
     }

@@ -6,6 +6,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import javax.annotation.PreDestroy;
+
 @SpringBootApplication
 public class CentralApplication {
 
@@ -28,6 +30,12 @@ public class CentralApplication {
 						.allowedMethods("GET", "POST", "DELETE", "PUT")  ;
 			}
 		};
+	}
+
+	//Not working? É necessario terminar conexões
+	@PreDestroy
+	public void onExit(){
+		System.out.println("Ending app!!!!!!!!!!!!!!!");
 	}
 
 }

@@ -5,34 +5,43 @@ import GlobalState from '../utils/GlobalState';
 const EventFilter = () => {
 
     const [state, setState] = useContext(GlobalState);
+    const [sevs, setSevs] = useState([])
+    const [acks, setAcks] = useState([false,false])
 
-    let auxSev = [], auxAck = [false,false]
+    // useEffect(() => {
+    //     console.log('Filter!')
+    //     setSevs([])
+    // }, [state.Filter])
 
     //Provavelmente chamar useEffect para dar reset nos botoes
     //Ter const faz com que tudo corra
     const handleSubmit = e => {
         e.preventDefault()
 
-        setState(state => ({...state, FilterSev: auxSev}));
-        setState(state => ({...state, FilterAck: auxAck}));
+        setState(state => ({...state, FilterSev: sevs}));
+        setState(state => ({...state, FilterAck: acks}));
         if(state.Filter === undefined) setState(state => ({...state, Filter: true}));
         else setState(state => ({...state, Filter: !state.Filter}));
     }
 
     const handleSevChange = (e) => {
-        var index = auxSev.indexOf(e.target.id);
+        var auxSevs = [...sevs]
+        var index = auxSevs.indexOf(e.target.id);
         if(index > -1){
-            auxSev.splice(index, 1);
+            auxSevs.splice(index, 1);
         }
         else{
-            auxSev = [...auxSev,e.target.id]
+            auxSevs = [...auxSevs,e.target.id]
         }
+        setSevs(auxSevs)
     }
 
     const handleAckChange = (e) => {
+        const auxAck = [...acks]
         const index = parseInt(e.target.id)
         auxAck[index] = !auxAck[index]
-        console.log(auxAck)
+        setAcks(auxAck)
+
     }
 
     return (

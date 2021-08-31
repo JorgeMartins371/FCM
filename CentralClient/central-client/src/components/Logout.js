@@ -10,8 +10,10 @@ const Logout = () => {
 
 
     setTimeout(() => {
-        history.push('/')
         setState(state => ({...state, isLog: false}))
+        // setState(state => ({...state, FilterSev: []}));
+        // setState(state => ({...state, FilterAck: []}));
+        history.push('/')
     },2000)
 
     localStorage.clear()

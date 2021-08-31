@@ -18,21 +18,21 @@ const InfoBox = () => {
     //      setEvents()
     // }, [state.User])
 
-    useEffect(() => {
-        setTimeout(() => {
-            getEvents()
-        },1000)
-    },[])
+    //Ainda não está a ir buscar events no arranque for some reason
+    // useEffect(() => {
+    //     setTimeout(() => {
+    //         getEvents()
+    //     },1000)
+    // },[])
 
     //Timeout de 1ms suficiente para dar load?
     useEffect(() => {
-        console.log('getEvents!')
-        console.log(state.Filter)
-        console.log(state.Ack)
         setTimeout(() => {
             getEvents()
+            // setState(state => ({...state, FilterSev: }));
         },1)
-    }, [state.Ack, state.Filter])
+        // setState(state => ({...state, FilterAck: []}));
+    }, [state.Ack,state.Filter])
 
 
     function getEvents() {
@@ -42,8 +42,6 @@ const InfoBox = () => {
             'Access-Control-Allow-Headers': 'Authorization',
         })
         let options = { headers }
-
-        console.log(state.user)
 
         fetchData('http://localhost:8080/connections/'+localStorage.getItem('user'), options)
             .then(res => {

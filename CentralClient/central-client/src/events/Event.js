@@ -38,7 +38,7 @@ const Event = ({conIds,event}) => {
             setHost(res.data.result[0])
             //console.log(host)
         })
-    }, [])
+    }, [state.Filter])
 
     //Sev[0] = Severity name Sev[1]= Severity Color
     const getSevColor = (sev) => {
@@ -54,15 +54,18 @@ const Event = ({conIds,event}) => {
 
     //Ack[0] = Title Ack[1] = Button Variant
     const getAckInfo = (ack) => {
-        if(ack === "0") return ['Yes', 'success']
-        else return ['No','danger']
+        if(ack === "0") return ['No','danger']
+        else return ['Yes', 'success']
     }
 
     var sevColor = getSevColor(event.severity)
     var ackInfo = getAckInfo(event.acknowledged)
     var date = new Date(event.clock*1000)
+
+    console.log("The filter1 is :" + state.FilterAck[1])
+    console.log("Acknowledge value is :" + event.acknowledged)
  
-    if(state.FilterAck[1] && event.acknowledged === "1"){
+    if(state.FilterAck[1] && event.acknowledged === "1" && !state.FilterAck[0]){
         return(
             <>
             </>
