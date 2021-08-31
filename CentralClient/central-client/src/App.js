@@ -40,6 +40,7 @@ function App() {
             </Route>
             <Route exact path='/events'>
               <EventFilter/>
+              <br></br>
               <InfoBox/>
             </Route>
             <Route exact path='/ack/:aid' component={AcknowledgeInfo} />

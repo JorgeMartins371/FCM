@@ -8,10 +8,13 @@ const EventFilter = () => {
     const [sevs, setSevs] = useState([])
     const [acks, setAcks] = useState([false,false])
 
-    // useEffect(() => {
-    //     console.log('Filter!')
-    //     setSevs([])
-    // }, [state.Filter])
+    //  useEffect(() => {
+    //      if(first){
+    //         setState(state => ({...state, FilterSev: sevs}));
+    //         setState(state => ({...state, FilterAck: acks}));
+    //      }
+    //     first=false
+    //  }, )
 
     //Provavelmente chamar useEffect para dar reset nos botoes
     //Ter const faz com que tudo corra
@@ -49,13 +52,13 @@ const EventFilter = () => {
             <h4>Filter Events:</h4>
              <Form>
                 <Row>
-                    <DropdownButton id="SevFilter" title="Severity">
-                        <Form.Group as={Col} className="mb-3">
+                <Form.Group as={Col} className="mb-3">
                             <Form.Label as="legend" column sm={2}>
-                                Severity
+                                Severity:
                             </Form.Label>
                             <Col sm={10}>
                                 <Form.Check
+                                inline
                                 type="checkbox"
                                 label="Not classified"
                                 name="checkbox"
@@ -63,6 +66,7 @@ const EventFilter = () => {
                                 id="0"
                                 />
                                 <Form.Check
+                                inline
                                 type="checkbox"
                                 label="Information"
                                 name="checkbox"
@@ -70,6 +74,7 @@ const EventFilter = () => {
                                 id="1"
                                 />
                                 <Form.Check
+                                inline
                                 type="checkbox"
                                 label="Warning"
                                 name="checkbox"
@@ -77,6 +82,7 @@ const EventFilter = () => {
                                 id="2"
                                 />
                                 <Form.Check
+                                inline
                                 type="checkbox"
                                 label="Average"
                                 name="checkbox"
@@ -84,6 +90,7 @@ const EventFilter = () => {
                                 id="3"
                                 />
                                 <Form.Check
+                                inline
                                 type="checkbox"
                                 label="High"
                                 name="checkbox"
@@ -91,6 +98,7 @@ const EventFilter = () => {
                                 id="4"
                                 />
                                 <Form.Check
+                                inline
                                 type="checkbox"
                                 label="Disaster"
                                 name="checkbox"
@@ -98,14 +106,13 @@ const EventFilter = () => {
                                 id="5"
                                 />
                             </Col>
+                        
                             </Form.Group>
-                    </DropdownButton>
-                    <DropdownButton id="AckFilter" title="Acknowledges">
-                        <Form.Group as={Col} className="mb-3">
+                    
+                            <Form.Group as={Col} className="mb-3">
                             <Form.Label as="legend" column sm={2}>
-                                Ack
+                                Ack:
                             </Form.Label>
-                            <Col sm={10}>
                                 <Form.Check
                                 type="checkbox"
                                 label="Acknowledged Events"
@@ -120,12 +127,10 @@ const EventFilter = () => {
                                 onChange={handleAckChange}
                                 id='1'
                                 />
-                            </Col>
                         </Form.Group>
-                    </DropdownButton>
                 </Row>
                 <Button as={Row} variant="primary" type="submit" onClick={handleSubmit}>
-                    Submit
+                    Apply Filters
                 </Button>
             </Form>
         </Container>

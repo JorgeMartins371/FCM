@@ -2,6 +2,7 @@ package G27.Central.zabbix.events;
 
 import G27.Central.DB.Connection;
 import G27.Central.DB.repositories.ConnectionRepository;
+import G27.Central.DB.repositories.User_ConnectionRepository;
 import G27.Central.connectors.ConnectorController;
 import G27.Central.connectors.Zabbix.ZabbixConnector;
 import G27.Central.utils.Request;
@@ -9,7 +10,6 @@ import G27.Central.utils.RequestBuilder;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.fasterxml.jackson.annotation.JsonAlias;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,8 +25,11 @@ public class EventController {
     private ZabbixConnector api;
     @Autowired
     private ConnectionRepository cr;
+    @Autowired
+    private User_ConnectionRepository ucr;
 
-    @GetMapping(EVENT_PATH)
+    //Not working anymore
+    @GetMapping(EVENTS_PATH)
     public JSONObject getEvent(@PathVariable String iid){
 
         api = ConnectorController.getZab(iid);
@@ -45,36 +48,60 @@ public class EventController {
         return result;
     }
 
-    @PostMapping(EVENT_PATH)
-    public JSONObject getSpecificEventS(@PathVariable String iid, @RequestBody JSONObject body){
-
-        if(!ConnectorController.hasZabCon(iid)){
-            Connection c = cr.findByid(iid);
-            api = ConnectorController.buildConZab(c.getID(),c.getIP(),c.getUser(),c.getEncoded());
-        }else api = ConnectorController.getZab(iid);
-
+    // MENCIONAR NO RELATORIO QUE POR DEFAULT OS EVENTOS VÊM ORDENADOS DE FORMA DESCENDENTE POR CLOCK, DIZER QUE VALUE 1 SAO EVENTS NOT OK E QUE 0 SAO OS OK
+    @PostMapping(EVENTS_PATH)
+    public JSONObject getSpecificEventS(@PathVariable String user, @RequestBody JSONObject body){
 
         RequestBuilder aux = RequestBuilder.newBuilder().method("event.get").paramEntry("output","extend")
                 .paramEntry("select_acknowledges","extend").paramEntry("selectTags","extend")
-                .paramEntry("selectSurpressionData","extend").paramEntry("value",1);
+                .paramEntry("selectSurpressionData","extend").paramEntry("value",1).paramEntry("sortfield","clock").paramEntry("sortorder","DESC");
 
-        if(!body.getJSONArray("severities").isEmpty()) aux.paramEntry("severities",body.getJSONArray("severities"));
+        if(body.containsKey("severities")){
+            if(!body.getJSONArray("severities").isEmpty()) aux.paramEntry("severities",body.getJSONArray("severities"));
+        }
 
-        JSONArray acks = body.getJSONArray("acknowledged");
-
-        if(acks.getBoolean(0) && !acks.getBoolean(1)) aux.paramEntry("acknowledged",true); //Apenas Eventos Acknowledged
+        if(body.containsKey("acknowledged")){
+            JSONArray acks = body.getJSONArray("acknowledged");
+            if(acks.getBoolean(0) && !acks.getBoolean(1)) aux.paramEntry("acknowledged",true); //Apenas Eventos Acknowledged
+        }
 
         Request req = aux.build();
 
-        JSONObject result = api.call(req);
 
-        System.err.println(JSON.toJSONString(result, true));
+        LinkedList<Connection> cons = getUserCons(user);
+        JSONObject result = new JSONObject();
+        JSONArray info = new JSONArray();
+        JSONObject events = new JSONObject();
+        String iid;
+
+        for (Connection con: cons) {
+
+            JSONObject conID = new JSONObject();
+
+            iid = con.getID();
+
+            if(!ConnectorController.hasZabCon(iid)){
+                api = ConnectorController.buildConZab(con.getID(),con.getIP(),con.getUser(),con.getEncoded());
+            }else api = ConnectorController.getZab(iid);
+
+            System.out.println(api);
+            conID.put("ConnectionID",iid);
+            events.putAll(api.call(req));
+            conID.put("Events",events);
+            info.add(conID);
+        }
+
+        result.put("Result",info);
+
+        //System.err.println(JSON.toJSONString(result, true));
 
         return result;
     }
 
     @PostMapping(ACK_PATH)
     public JSONObject ackEvent(@PathVariable String iid ,@RequestBody JSONObject ack){
+
+        System.out.println(iid);
 
         api = ConnectorController.getZab(iid);
 
@@ -107,4 +134,20 @@ public class EventController {
 
         return api.call(req);
     }
+
+    private LinkedList<Connection> getUserCons(String user){
+        List<String> uc = ucr.queryByUsername(user);
+
+        LinkedList<Connection> cons = new LinkedList<>();
+
+        Connection con;
+
+        for (String conID : uc) {
+            con = cr.findByid(conID);
+            cons.add(con);
+        }
+
+        return cons;
+    }
+
 }

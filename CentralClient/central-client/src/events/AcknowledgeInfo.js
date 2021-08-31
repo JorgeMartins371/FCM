@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom'
 import { ListGroup, Col, Row, Container} from 'react-bootstrap'
 
 const AcknowledgeInfo = (acknowledges) => {
-    console.log(acknowledges.location.state)
     return (
         <Container>
             <ListGroup>

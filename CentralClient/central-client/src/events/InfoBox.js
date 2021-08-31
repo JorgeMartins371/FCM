@@ -3,14 +3,13 @@ import {Container} from 'react-bootstrap'
 import { fetchData } from '../utils/Fetcher'
 import Event from './Event'
 import GlobalState from '../utils/GlobalState';
+import { dangerMessage } from '../utils/AlertMessages';
 
 const InfoBox = () => {
 
-    const [events, setEvents] = useState()
+    const [msg, setMsg] = useState()
+    const [events,setEvents] = useState([])
     const [state, setState] = useContext(GlobalState);
-    const [conIds, setConIds] = useState([])
-
-    let load = true;
 
     //  useEffect(() => {
     //      console.log('Clean')
@@ -27,86 +26,52 @@ const InfoBox = () => {
 
     //Timeout de 1ms suficiente para dar load?
     useEffect(() => {
-        setTimeout(() => {
-            getEvents()
-            // setState(state => ({...state, FilterSev: }));
-        },1)
-        // setState(state => ({...state, FilterAck: []}));
-    }, [state.Ack,state.Filter])
+        getEvents()
+    }, [state.Filter,state.Ack])
 
 
     function getEvents() {
-        console.log('actually running get events')
-        let headers = new Headers({
-            Accept: 'application/json',
-            'Access-Control-Allow-Headers': 'Authorization',
-        })
-        let options = { headers }
+        const severities = state.FilterSev
+        const acknowledged = state.FilterAck
 
-        fetchData('http://localhost:8080/connections/'+localStorage.getItem('user'), options)
+        let payload = {
+            severities,
+            acknowledged
+        }
+        let options = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(payload)
+        }
+        console.log('actually running get events')
+
+        fetchData('http://localhost:8080/'+localStorage.getItem('user')+'/event', options)
             .then(res => {
                 console.log(res)
-                setConIds(res.data.Connections)
-
-                res.data.Connections.map(con => {
-                    const severities = state.FilterSev
-                    const acknowledged = state.FilterAck
-
-                    let payload = {
-                        severities,
-                        acknowledged
-                    }
-                    let options = {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify(payload)
-                    }
-                        fetchData('http://localhost:8080/'+con.id+'/event',options)
-                        .then(res => {
-                            console.log(res.data.result)
-                            setEvents(res.data.result) //provavelmente tera de ser filtrado e extender array
-                            console.log(events)
+                if(res.err == true){
+                    setMsg(dangerMessage("One of your associated connections is badly setup, please contact a system admin."))
+                }
+                else{
+                    var auxEvents = []
+                    var auxInfo = []
+                    res.data.Result.map(Con => {
+                        console.log(Con)
+                        auxInfo = [...auxInfo,Con]
+                        Con.Events.result.map(event => {
+                            auxEvents = [...auxEvents,<Event conId={Con.ConnectionID} event={event}/>]
                         })
                     })
+                    setEvents(auxEvents)
+                }
             })
     }
-    
-    // const getEvents = () => {
-
-    //     const severities = state.FilterSev
-    //     const acknowledged = state.FilterAck
-
-    //     let payload = {
-    //         severities,
-    //         acknowledged
-    //     }
-    //     let options = {
-    //         method: 'POST',
-    //         headers: {
-    //             'Content-Type': 'application/json'
-    //         },
-    //         body: JSON.stringify(payload)
-    //     }
-
-    //     console.log('Cons' + conIds)
-
-    //     conIds.map(con => {
-    //         console.log('COOOOOOOOOOOOOOONNNNN')
-    //         fetchData('http://localhost:8080/'+con.id+'/event',options)
-    //         .then(res => {
-    //             console.log(res.data.result)
-    //             setEvents(res.data.result) //provavelmente tera de ser filtrado e extender array
-    //             console.log(events)
-    //         })
-    //     })
-    // }
 
     return (
         <Container>
             <div className="row justify-content-md-center">
-                {events !== undefined ? 
+                {events.length !== 0 ? 
                 <table className="table table-hover table-responsive mb-0">
 
                 <thead>
@@ -122,16 +87,13 @@ const InfoBox = () => {
                 </thead>
 
                     <tbody>
-                        {events.map(event => {
-                            return(
-                                <Event conIds={conIds} event={event}/>
-                            )
-                        })}
+                        {events}
                     </tbody>
 
                 </table> : 
                 <Container>
                     <h4>No events to show...</h4>
+                    <h5>{msg}</h5>
                 </Container>
                 }
             </div>

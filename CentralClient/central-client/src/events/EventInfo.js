@@ -19,19 +19,13 @@ const EventInfo = ({conId,event}) => {
             'Access-Control-Allow-Headers': 'Authorization',
         })
         let options = { headers }
-        const a = fetchData('http://localhost:8080/Zabbix1/trigger/' + event.objectid, options)
+        const a = fetchData('http://localhost:8080/'+conId+'/trigger/' + event.objectid, options)
             .then(res => {
                 setTriggerInfo(res.data.result)
         })
     }, [])
 
-    if(triggerInfo[0] === undefined){
-        return(
-            <h5>empty?</h5>
-        )
-    }
-
-    if(triggerInfo[0].comments !== ""){
+    if(triggerInfo[0] !== undefined && triggerInfo[0].comments !== ""){
         return (
             <Container>
                 <OverlayTrigger overlay={<Tooltip id="tooltip-disabled">Event info</Tooltip>}>

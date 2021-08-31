@@ -11,7 +11,9 @@ import G27.Central.utils.Encoder;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -127,9 +129,13 @@ public class ConnectorController {
 
         String logPass = auxPass.split(":")[1];
 
-        boolean login = zab.login(user, logPass);
+        try{
+            boolean login = zab.login(user, logPass);
+            System.out.println("Login result= " + login);
+        }catch (Exception e){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Couldnt initialize Connection",e);
 
-        System.out.println("Login result= " + login);
+        }
 
         return zab;
     }

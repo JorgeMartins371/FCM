@@ -3,13 +3,15 @@ import {Button, Modal, Form, Row, Col, Container} from 'react-bootstrap'
 import { fetchData } from '../utils/Fetcher';
 import GlobalState from '../utils/GlobalState';
 
-const Acknowledge = (eid) => {
+const Acknowledge = ({conId,eid}) => {
 
+    console.log('ConId is: ' + conId)
+    console.log('Eid is: ' + eid)
     const [show, setShow] = useState(false)
     const [severity, setSev] = useState(9)
     const [ack, setAck] = useState(false)
     const [close, setClose] = useState(false)
-    const [message, setMsg] = useState('')
+    const [msg, setMsg] = useState('')
 
     const [state, setState] = useContext(GlobalState);
 
@@ -20,7 +22,9 @@ const Acknowledge = (eid) => {
 
         e.preventDefault()
 
-        const eventids = eid.eventids;
+        const eventids = eid;
+
+        const message = "Acknowledged by User " + localStorage.getItem('user') + ": \n" + msg
 
         let payload = {
             eventids,
@@ -37,8 +41,8 @@ const Acknowledge = (eid) => {
             body: JSON.stringify(payload)
         }
 
-        console.log(options)
-        const resp = fetchData('http://localhost:8080/Zabbix1/event/ack',options)
+        console.log(conId)
+        const resp = fetchData('http://localhost:8080/'+ conId +'/event/ack',options)
          .then(res => {
             setState(state => ({...state, Ack: res}));
          })

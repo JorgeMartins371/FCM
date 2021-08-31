@@ -40,6 +40,12 @@ const NavBar = () => {
                 {state.isLog || localStorage.getItem("user")!==null ? <Nav.Link>Logout</Nav.Link> : <></>}
             </LinkContainer>
 
+            {state.isLog || localStorage.getItem("user")!==null ? 
+            <div className="d-flex flex-column-reverse">
+                <Nav.Link> Logged in as: {localStorage.getItem("user")}</Nav.Link> 
+            </div>
+            : <></>}
+
             </Nav>
             </Navbar.Collapse>
         </Container>

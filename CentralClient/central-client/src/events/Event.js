@@ -7,14 +7,7 @@ import { fetchData } from '../utils/Fetcher';
 import GlobalState from '../utils/GlobalState';
 import EventInfo from './EventInfo.js'
 
-/*0 - not classified;
-1 - information;
-2 - warning;
-3 - average;
-4 - high;
-5 - disaster.*/
-
-const Event = ({conIds,event}) => {
+const Event = ({conId,event}) => {
 
     const name = "null"
     const maintenance_status = "0"
@@ -23,7 +16,7 @@ const Event = ({conIds,event}) => {
         maintenance_status
     }
 
-    const[host, setHost] = useState(JSON.stringify(dummy));
+    const [host, setHost] = useState(JSON.stringify(dummy));
     const [state, setState] = useContext(GlobalState);
 
     useEffect(() => {
@@ -32,13 +25,13 @@ const Event = ({conIds,event}) => {
             'Access-Control-Allow-Headers': 'Authorization'
         })
         let options = { headers }
-        fetchData('http://localhost:8080/Zabbix1/host/'+event.objectid,options)
+        fetchData('http://localhost:8080/'+conId+'/host/'+event.objectid,options)
         .then(res => {
             //console.log(res) 
             setHost(res.data.result[0])
             //console.log(host)
         })
-    }, [state.Filter])
+    }, [])
 
     //Sev[0] = Severity name Sev[1]= Severity Color
     const getSevColor = (sev) => {
@@ -61,37 +54,34 @@ const Event = ({conIds,event}) => {
     var sevColor = getSevColor(event.severity)
     var ackInfo = getAckInfo(event.acknowledged)
     var date = new Date(event.clock*1000)
-
-    console.log("The filter1 is :" + state.FilterAck[1])
-    console.log("Acknowledge value is :" + event.acknowledged)
  
-    if(state.FilterAck[1] && event.acknowledged === "1" && !state.FilterAck[0]){
-        return(
-            <>
-            </>
-        )
-    }
-    else{
-        return (
-             
-                <tr>
-                    <th>Zabbix1</th>
-                    <td>{host.name}{host.maintenance_status === "1" ? <MaintenanceIcon/> : <></>}</td>
-                    <td>{event.name}</td>
-                    <td><EventInfo conId={"kek"} event={event}/></td>
-                    <td>{getDateFormat(date)}</td>
-                    <td style={{backgroundColor : sevColor[1]}} align="center">{sevColor[0]}</td>
-                    <td>
-                        <DropdownButton id={event.eventid + 'Ack'}  title= {ackInfo[0]} variant={ackInfo[1]}>
-                            <Dropdown.Item><Link to={{   pathname: "/ack/"+event.eventid,   state: event.acknowledges  }}>Go to AckInfo</Link></Dropdown.Item>
-                            <Acknowledge eventids={event.eventid}/>
-                        </DropdownButton>
-                    </td>
-                </tr>
-
+    if(state.FilterAck !== undefined){
+        if(state.FilterAck[1] && event.acknowledged === "1" && !state.FilterAck[0]){
+            return(
+                <>
+                </>
             )
         }
-}
+    }
+        
+    return (
+            <tr>
+                <th>{conId}</th>
+                <td>{host.name}{host.maintenance_status === "1" ? <MaintenanceIcon/> : <></>}</td>
+                <td>{event.name}</td>
+                <td><EventInfo conId={conId} event={event}/></td>
+                <td>{getDateFormat(date)}</td>
+                <td style={{backgroundColor : sevColor[1]}} align="center">{sevColor[0]}</td>
+                <td>
+                    <DropdownButton id={event.eventid + 'Ack'}  title= {ackInfo[0]} variant={ackInfo[1]}>
+                        <Dropdown.Item><Link to={{   pathname: "/ack/"+event.eventid,   state: event.acknowledges  }}>Go to AckInfo</Link></Dropdown.Item>
+                        <Acknowledge conId={conId} eid={event.eventid}/>
+                    </DropdownButton>
+                </td>
+            </tr>
+
+        )
+    }
 
 function getDateFormat(date){ //Ver razao de necessitar mais duas horas
     return date.toLocaleDateString() + ' ' + (date.getHours()+2) + ':' +  date.getMinutes() + ':' + date.getSeconds()
