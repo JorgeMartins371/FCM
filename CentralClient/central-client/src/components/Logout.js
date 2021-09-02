@@ -1,6 +1,7 @@
 import {useContext} from 'react'
 import { useHistory } from "react-router-dom";
 import GlobalState from '../utils/GlobalState';
+import { Container } from 'react-bootstrap'
 
 const Logout = () => {
 
@@ -11,8 +12,6 @@ const Logout = () => {
 
     setTimeout(() => {
         setState(state => ({...state, isLog: false}))
-        // setState(state => ({...state, FilterSev: []}));
-        // setState(state => ({...state, FilterAck: []}));
         history.push('/')
     },2000)
 
@@ -20,9 +19,9 @@ const Logout = () => {
     
     
     return (
-        <div>
+        <Container>
             <h3>Logging out...</h3>
-        </div>
+        </Container>
     )
 }
 

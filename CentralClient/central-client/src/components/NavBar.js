@@ -1,7 +1,6 @@
-import {Container, Nav, Navbar, NavDropdown } from 'react-bootstrap'
+import {Container, Nav, Navbar} from 'react-bootstrap'
 import {LinkContainer} from 'react-router-bootstrap'
 import { useEffect, useContext } from 'react'
-import { Link } from "react-router-dom";
 import React from 'react'
 import GlobalState from '../utils/GlobalState';
 
@@ -40,13 +39,14 @@ const NavBar = () => {
                 {state.isLog || localStorage.getItem("user")!==null ? <Nav.Link>Logout</Nav.Link> : <></>}
             </LinkContainer>
 
+        </Nav>
+        <Nav>
             {state.isLog || localStorage.getItem("user")!==null ? 
             <div className="d-flex flex-column-reverse">
                 <Nav.Link> Logged in as: {localStorage.getItem("user")}</Nav.Link> 
             </div>
             : <></>}
-
-            </Nav>
+        </Nav>
             </Navbar.Collapse>
         </Container>
         </Navbar>

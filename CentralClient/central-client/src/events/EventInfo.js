@@ -2,8 +2,7 @@ import { useEffect , useState, useContext  } from 'react'
 import { BsInfoCircleFill } from "react-icons/bs"
 import { OverlayTrigger, Tooltip } from 'react-bootstrap'
 import { fetchData } from '../utils/Fetcher'
-import GlobalState from '../utils/GlobalState';
-import {Button, Modal, Form, Row, Col, Container} from 'react-bootstrap'
+import {Button, Modal, Container} from 'react-bootstrap'
 
 const EventInfo = ({conId,event}) => {
 

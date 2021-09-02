@@ -1,5 +1,5 @@
 import { useState, useContext, useEffect } from 'react'
-import { Container, Form, Col, Row, DropdownButton, Button } from 'react-bootstrap'
+import { Container, Form, Col, Row, Button } from 'react-bootstrap'
 import GlobalState from '../utils/GlobalState';
 
 const EventFilter = () => {
@@ -7,6 +7,7 @@ const EventFilter = () => {
     const [state, setState] = useContext(GlobalState);
     const [sevs, setSevs] = useState([])
     const [acks, setAcks] = useState([false,false])
+    const [refresh, setRefresh] = useState(0)
 
     //  useEffect(() => {
     //      if(first){
@@ -15,6 +16,10 @@ const EventFilter = () => {
     //      }
     //     first=false
     //  }, )
+    useEffect(() => {
+        setState(state => ({...state, Refresh: refresh}));
+        setState(state => ({...state, Toggle: true}));
+    }, [refresh])
 
     //Provavelmente chamar useEffect para dar reset nos botoes
     //Ter const faz com que tudo corra
@@ -47,13 +52,17 @@ const EventFilter = () => {
 
     }
 
+    const handleRefreshChange = (e) => {
+        setRefresh(e.target.value)
+    }
+
     return (
         <Container>
             <h4>Filter Events:</h4>
              <Form>
                 <Row>
                 <Form.Group as={Col} className="mb-3">
-                            <Form.Label as="legend" column sm={2}>
+                            <Form.Label as="legend">
                                 Severity:
                             </Form.Label>
                             <Col sm={10}>
@@ -110,7 +119,7 @@ const EventFilter = () => {
                             </Form.Group>
                     
                             <Form.Group as={Col} className="mb-3">
-                            <Form.Label as="legend" column sm={2}>
+                            <Form.Label as="legend">
                                 Ack:
                             </Form.Label>
                                 <Form.Check
@@ -126,6 +135,44 @@ const EventFilter = () => {
                                 name="checkbox"
                                 onChange={handleAckChange}
                                 id='1'
+                                />
+                        </Form.Group>
+
+                        <Form.Group className="mb-3">
+                            <Form.Label as="legend">
+                                Refresh events:
+                            </Form.Label>
+                                <Form.Check
+                                type="radio"
+                                label="No Refresh"
+                                name="0"
+                                value={0}
+                                onChange={handleRefreshChange}
+                                id='0'
+                                />
+                                <Form.Check
+                                type="radio"
+                                label="5 seconds"
+                                name="0"
+                                value={5000}
+                                onChange={handleRefreshChange}
+                                id='0'
+                                />
+                                <Form.Check
+                                type="radio"
+                                label="30 seconds"
+                                name="0"
+                                value={30000}
+                                onChange={handleRefreshChange}
+                                id='0'
+                                />
+                                <Form.Check
+                                type="radio"
+                                label="1 minute"
+                                name="0"
+                                value={60000}
+                                onChange={handleRefreshChange}
+                                id='0'
                                 />
                         </Form.Group>
                 </Row>

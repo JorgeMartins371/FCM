@@ -1,5 +1,5 @@
 import { useEffect , useState, useContext } from 'react'
-import { ListGroup, Col, Row, DropdownButton, Dropdown} from 'react-bootstrap'
+import { DropdownButton, Dropdown} from 'react-bootstrap'
 import {Link} from 'react-router-dom'
 import Acknowledge from './Acknowledge.js'
 import MaintenanceIcon from './MaintenanceIcon.js'
@@ -20,6 +20,15 @@ const Event = ({conId,event}) => {
     const [state, setState] = useContext(GlobalState);
 
     useEffect(() => {
+        getHosts()
+    }, [])
+
+    useEffect(() => {
+        getHosts()
+    }, [state.Filter,state.Ack,state.Toggle])
+
+
+    function getHosts() {
         let headers = new Headers({
             Accept: 'application/json',
             'Access-Control-Allow-Headers': 'Authorization'
@@ -31,7 +40,7 @@ const Event = ({conId,event}) => {
             setHost(res.data.result[0])
             //console.log(host)
         })
-    }, [])
+    }
 
     //Sev[0] = Severity name Sev[1]= Severity Color
     const getSevColor = (sev) => {

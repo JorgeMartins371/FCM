@@ -11,6 +11,7 @@ const InfoBox = () => {
     const [events,setEvents] = useState([])
     const [state, setState] = useContext(GlobalState);
 
+
     //  useEffect(() => {
     //      console.log('Clean')
     //      setConIds([])
@@ -24,7 +25,17 @@ const InfoBox = () => {
     //     },1000)
     // },[])
 
-    //Timeout de 1ms suficiente para dar load?
+    useEffect(() => {
+        if(state.Refresh != 0){
+            setTimeout(() => {
+                getEvents()
+                console.log('Refresh Events!')
+                console.log("refresh is: " + state.Refresh)
+                setState(state => ({...state, Toggle: !state.Toggle}));
+            },state.Refresh)
+        }
+    }, [state.Toggle])
+    
     useEffect(() => {
         getEvents()
     }, [state.Filter,state.Ack])
@@ -45,7 +56,6 @@ const InfoBox = () => {
             },
             body: JSON.stringify(payload)
         }
-        console.log('actually running get events')
 
         fetchData('http://localhost:8080/'+localStorage.getItem('user')+'/event', options)
             .then(res => {
