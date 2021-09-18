@@ -16,6 +16,7 @@ public class HostController {
 
     private ZabbixConnector api;
 
+    //Unused
     @GetMapping(HOST_PATH)
     public JSONObject getHost(@PathVariable String iid) {
 

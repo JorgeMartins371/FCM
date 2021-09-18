@@ -11,21 +11,15 @@ const InfoBox = () => {
     const [events,setEvents] = useState([])
     const [state, setState] = useContext(GlobalState);
 
-
-    //  useEffect(() => {
-    //      console.log('Clean')
-    //      setConIds([])
-    //      setEvents()
-    // }, [state.User])
-
-    //Ainda não está a ir buscar events no arranque for some reason
-    // useEffect(() => {
-    //     setTimeout(() => {
-    //         getEvents()
-    //     },1000)
-    // },[])
+    useEffect(() => {
+        setTimeout(() => {
+            getEvents()
+        },1)      
+    },[])
 
     useEffect(() => {
+        console.log('Toggle!')
+        console.log(state.Refresh)
         if(state.Refresh != 0){
             setTimeout(() => {
                 getEvents()

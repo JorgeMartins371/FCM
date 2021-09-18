@@ -43,7 +43,7 @@ const NavBar = () => {
         <Nav>
             {state.isLog || localStorage.getItem("user")!==null ? 
             <div className="d-flex flex-column-reverse">
-                <Nav.Link> Logged in as: {localStorage.getItem("user")}</Nav.Link> 
+                <Nav.Link> Logged in as: {state.isLog === undefined ? localStorage.getItem("user") : state.user}</Nav.Link> 
             </div>
             : <></>}
         </Nav>

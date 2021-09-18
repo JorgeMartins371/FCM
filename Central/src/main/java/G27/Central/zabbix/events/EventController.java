@@ -28,7 +28,7 @@ public class EventController {
     @Autowired
     private User_ConnectionRepository ucr;
 
-    //Not working anymore
+    //Unused
     @GetMapping(EVENTS_PATH)
     public JSONObject getEvent(@PathVariable String iid){
 
@@ -48,7 +48,7 @@ public class EventController {
         return result;
     }
 
-    // MENCIONAR NO RELATORIO QUE POR DEFAULT OS EVENTOS VÊM ORDENADOS DE FORMA DESCENDENTE POR CLOCK, DIZER QUE VALUE 1 SAO EVENTS NOT OK E QUE 0 SAO OS OK
+    // Main method to get events
     @PostMapping(EVENTS_PATH)
     public JSONObject getSpecificEventS(@PathVariable String user, @RequestBody JSONObject body){
 
@@ -98,6 +98,7 @@ public class EventController {
         return result;
     }
 
+    //Acknowledge method
     @PostMapping(ACK_PATH)
     public JSONObject ackEvent(@PathVariable String iid ,@RequestBody JSONObject ack){
 
@@ -125,8 +126,6 @@ public class EventController {
             aux.paramEntry("severity",ack.getInteger("severity"));
             action +=8;
         }
-
-        //Fazer controlo
 
         aux.paramEntry("action",action);
 

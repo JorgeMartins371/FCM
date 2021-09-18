@@ -31,11 +31,4 @@ public class CentralApplication {
 			}
 		};
 	}
-
-	//Not working? É necessario terminar conexões
-	@PreDestroy
-	public void onExit(){
-		System.out.println("Ending app!!!!!!!!!!!!!!!");
-	}
-
 }

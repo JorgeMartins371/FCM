@@ -54,7 +54,7 @@ const Event = ({conId,event}) => {
         }
     }
 
-    //Ack[0] = Title Ack[1] = Button Variant
+    //Ack[0] = Title | Ack[1] = Button Variant
     const getAckInfo = (ack) => {
         if(ack === "0") return ['No','danger']
         else return ['Yes', 'success']
@@ -92,7 +92,7 @@ const Event = ({conId,event}) => {
         )
     }
 
-function getDateFormat(date){ //Ver razao de necessitar mais duas horas
+function getDateFormat(date){ 
     return date.toLocaleDateString() + ' ' + (date.getHours()+2) + ':' +  date.getMinutes() + ':' + date.getSeconds()
 }
 

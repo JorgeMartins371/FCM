@@ -1,7 +1,6 @@
 import React, { useState, useContext, useEffect  } from 'react'
-import { Form, Col, Button, Container } from 'react-bootstrap'
+import { Container } from 'react-bootstrap'
 import { fetchData } from '../../utils/Fetcher';
-import { useHistory } from "react-router-dom";
 import GlobalState from '../../utils/GlobalState';
 import RegisterUser from './RegisterUser';
 import DeleteUser from './DeleteUser';
@@ -22,6 +21,7 @@ const UserManager = () => {
             let options = { headers }
             const a = fetchData('http://localhost:8080/users', options)
                 .then(res => {
+                    console.log(res)
                     setUsers(res.data.Users)
                     console.log(res)
             })

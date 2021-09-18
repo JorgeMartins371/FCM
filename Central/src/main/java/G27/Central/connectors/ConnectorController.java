@@ -34,25 +34,6 @@ public class ConnectorController {
     @Autowired
     private ConnectionRepository cr;
 
-    @GetMapping(ZABBIX_CON)
-    public void getZabbixCon(){
-
-        String url = "http://195.22.17.158/zabbix/api_jsonrpc.php";
-
-        zab = new ZabbixConnector(url);
-        zab.init();
-        nextId.incrementAndGet();
-
-        connectors.put("Zabbix"+nextId.toString(),zab);
-
-        System.out.println("Connector intialized succesfully with ID= Zabbix" + nextId.toString());
-
-        String user = "user_isel_estagio";
-        String password = "Admin.Cl4raN€t";
-        boolean login = zab.login(user, password);
-        System.out.println("login result:" + login);
-    }
-
     @PostMapping(ZABBIX_CON)
     public JSONObject getSpecificCon(@RequestBody JSONObject body){
 

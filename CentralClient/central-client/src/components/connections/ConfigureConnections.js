@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect  } from 'react'
-import {Button, Modal, Form, Row, Col, Container} from 'react-bootstrap'
+import {Button, Modal, Container} from 'react-bootstrap'
 import StoredConnections from '../StoredConnections'
 import RemoveConnection from './RemoveConnection';
 import AddConnectionUser from './AddConnectionUser';
@@ -14,6 +14,7 @@ const ConfigureConnections = ({connections,user}) => {
     const handleClose = () => setShow(false)
     const handleShow = () => setShow(true)
 
+    //Get User's associated connections
     useEffect(() => {
         let headers = new Headers({
             Accept: 'application/json',

@@ -1,6 +1,5 @@
 package G27.Central.utils;
 
-import java.util.Arrays;
 import java.util.Base64;
 
 public class Encoder {

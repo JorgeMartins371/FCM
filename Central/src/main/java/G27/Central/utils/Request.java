@@ -2,7 +2,7 @@ package G27.Central.utils;
 
 import java.util.HashMap;
 import java.util.Map;
-import com.alibaba.fastjson.JSON; //Alibaba json
+import com.alibaba.fastjson.JSON;
 
 public class Request {
     private String jsonrpc = "2.0";

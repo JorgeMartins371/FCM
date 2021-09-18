@@ -1,12 +1,10 @@
 import React, { useState, useContext, useEffect  } from 'react'
-import { Row, Col, Button, Container, Modal } from 'react-bootstrap'
+import { Button, Container, Modal } from 'react-bootstrap'
 import { fetchData } from '../../utils/Fetcher';
-import { useHistory } from "react-router-dom";
 import GlobalState from '../../utils/GlobalState';
 import StoreCon from './StoreCon';
 import StoredConnections from '../StoredConnections';
 import ConfigureConnections from './ConfigureConnections';
-import DeleteConnection from './DeleteConnection';
 
 const ConnectionManager = () => {
 
@@ -18,6 +16,7 @@ const ConnectionManager = () => {
     const [users, setUsers] = useState([])
     const [connections, setConnections] = useState([])
 
+    //Get users and system connections
     useEffect(() => {
             let headers = new Headers({
                 Accept: 'application/json',
@@ -122,7 +121,7 @@ const ConnectionManager = () => {
 
     else{
         return(
-            <h1>Uhhhhhhhhhhhhh.... You shouldn't be here mate 🤨</h1>
+            <h1>User isnt admin.</h1>
         )
     }
 

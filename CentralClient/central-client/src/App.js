@@ -13,20 +13,7 @@ import UserManager from './components/users/UserManager.js';
 
 function App() {
 
-  /*const { token, setToken} = useToken();
-
-  if(!token) {
-    return <Login setToken={setToken} />
-  }*/
-
-  const [token, setToken] = useState();
   const [state, setState] = useState({});
-
-  //  if(!localStorage.getItem('isLog') && !token) {
-  //    return(
-  //      <Login/>
-  //   ) 
-  //  }
 
   return (
     <div className="App">

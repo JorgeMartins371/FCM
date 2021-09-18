@@ -8,21 +8,13 @@ const EventFilter = () => {
     const [sevs, setSevs] = useState([])
     const [acks, setAcks] = useState([false,false])
     const [refresh, setRefresh] = useState(0)
-
-    //  useEffect(() => {
-    //      if(first){
-    //         setState(state => ({...state, FilterSev: sevs}));
-    //         setState(state => ({...state, FilterAck: acks}));
-    //      }
-    //     first=false
-    //  }, )
+    
     useEffect(() => {
+        console.log('Refresh!')
         setState(state => ({...state, Refresh: refresh}));
-        setState(state => ({...state, Toggle: true}));
+        setState(state => ({...state, Toggle: !state.Toggle}));
     }, [refresh])
 
-    //Provavelmente chamar useEffect para dar reset nos botoes
-    //Ter const faz com que tudo corra
     const handleSubmit = e => {
         e.preventDefault()
 
